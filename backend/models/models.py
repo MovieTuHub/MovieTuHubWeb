@@ -1,4 +1,4 @@
-from pydantic import Field, model_validator, BaseModel
+from pydantic import Field, model_validator, BaseModel, EmailStr
 from datetime import date
 from enum import Enum
 from beanie import Link, Document
@@ -78,6 +78,7 @@ class Movie(Document):
 # 4. USER, CREDENTIALS & REVIEWS COLLECTIONS
 
 class User(Document):
+    username: str
     image: Optional[bytes] = None
     bookmarks: List[Link[Movie]] = [] 
 
@@ -85,7 +86,7 @@ class User(Document):
         name = "users"
 
 class Credential(Document):
-    username: str
+    email: EmailStr
     password: str  
     user: Link[User]
 
