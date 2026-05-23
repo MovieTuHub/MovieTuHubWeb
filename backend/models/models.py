@@ -102,3 +102,5 @@ class Review(Document):
 
     class Settings: 
         name = "reviews"
+
+MODELS = [Category,Actor,Movie,User,Credential,Review]
