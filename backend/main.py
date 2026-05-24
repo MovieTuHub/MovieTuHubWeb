@@ -3,10 +3,10 @@ import os
 from fastapi import FastAPI
 from dotenv import load_dotenv
 from logger import create_logger
-from services.func import init_db
 from models.requestModels import *
-from services.authService import add_user
+from controllers.authController import authRouter
 from contextlib import asynccontextmanager
+from components.func import init_db
 
 logger = create_logger(__name__)
 
@@ -20,14 +20,11 @@ async def start_db(app: FastAPI):
 
 app = FastAPI(lifespan=start_db)
 
+app.include_router(authRouter)
 
 @app.get("/")
 async def hello():
     return {"message":"hello"}
-
-@app.post("/auth/register",status_code=201)
-async def register(request: CreateUserRequest):
-    return await add_user(request)
 
 if __name__ == "__main__":
     uvicorn.run(app)

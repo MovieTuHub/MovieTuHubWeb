@@ -1,5 +1,6 @@
 from datetime import date
 from typing import List, Optional
+from beanie import PydanticObjectId
 from pydantic import BaseModel, ConfigDict
 from models.models import Banner, Producer, StreamingService
 
@@ -28,7 +29,7 @@ class CategoryResponse(BaseModel):
 class LoginResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    token: str
+    id: PydanticObjectId
     username: str
     image: Optional[bytes] = None
 

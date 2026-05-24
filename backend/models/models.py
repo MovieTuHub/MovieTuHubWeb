@@ -87,7 +87,7 @@ class User(Document):
 
 class Credential(Document):
     email: EmailStr
-    password: str  
+    password: bytes  
     user: Link[User]
 
     class Settings: 
