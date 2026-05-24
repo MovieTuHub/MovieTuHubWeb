@@ -16,11 +16,11 @@ async def add_actor(request: ActorRequest)-> JSONResponse:
     if (len(existing_actors)>0):
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"message":"The actor already exists"})
 
-    actor = Actor(name=request.name, image=request.image)
+    actor = Actor(**request.model_dump())
     
     await actor.create()
 
-    response = ActorResponse(id=actor.id, name=actor.name, image=actor.image)
+    response = ActorResponse(**actor.model_dump())
 
     return jsonable_encoder(response)
 
