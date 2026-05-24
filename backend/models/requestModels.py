@@ -1,9 +1,7 @@
-import base64
-
 from pydantic import EmailStr, Field, BaseModel, field_validator, model_validator
 from datetime import date
 from typing import List, Optional
-from models import Banner, StreamingService, Producer
+from models.models import Banner, StreamingService, Producer
 
 class CategoryRequest(BaseModel):
     category: str
@@ -66,6 +64,8 @@ class MovieRequest(BaseModel):
     budget: str
     grossProfit: str
 
+    model_config = {"val_json_bytes":"base64"}
+
 
 class ChangeBookmarkRequest(BaseModel):
     user: str
@@ -75,10 +75,12 @@ class ChangeBookmarkRequest(BaseModel):
 # 4. USER, CREDENTIALS & REVIEWS COLLECTIONS
 
 class CreateUserRequest(BaseModel):
-    image: Optional[str] = None
+    image: Optional[bytes] = None
     email: EmailStr
     username: str
-    password: str  
+    password: str
+
+    model_config = {"val_json_bytes":"base64"}
 
 class LoginRequest(BaseModel):
     email: EmailStr
@@ -90,21 +92,3 @@ class ReviewRequest(BaseModel):
     title: str
     reviewText: str
     movie: str
-
-class Base64ImageRequest(BaseModel):
-    """
-    Accepts images sent inside JSON payloads as Base64 encoded strings.
-    This allows clients to easily bundle images inside a single API post.
-    """
-    image_data: str  # The raw base64 string from the frontend
-
-    @field_validator("image_data")
-    @classmethod
-    def validate_and_convert_base64(cls, v: str) -> bytes:
-        try:
-            # Clean up the typical data URI prefix if sent by web frontends
-            if "," in v:
-                v = v.split(",")[1]
-            return base64.b64decode(v)
-        except Exception:
-            raise ValueError("Invalid base64 image data string provided.")

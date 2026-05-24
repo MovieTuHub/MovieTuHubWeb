@@ -87,7 +87,7 @@ class User(Document):
 
 class Credential(Document):
     email: EmailStr
-    password: str  
+    password: bytes  
     user: Link[User]
 
     class Settings: 
@@ -102,3 +102,5 @@ class Review(Document):
 
     class Settings: 
         name = "reviews"
+
+MODELS = [Category,Actor,Movie,User,Credential,Review]
