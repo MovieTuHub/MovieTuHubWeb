@@ -17,7 +17,7 @@ class StreamingService(BaseModel):
 
 class Producer(BaseModel):
     name: str
-    producerRole: List[str]
+    producer_role: List[str]
 
 class Banner(BaseModel):
     backdrop: bytes
@@ -33,7 +33,7 @@ class Category(Document):
 
 class Actor(Document):
     name: str
-    image: bytes
+    image: Optional[bytes] = None
 
     class Settings:  
         name = "actors"
@@ -47,22 +47,22 @@ class MovieCast(BaseModel):
 class Movie(Document):
     id: str = Field(default=None, alias="_id") 
     banners: List[Banner]
-    mainPageBanner: Banner
+    main_page_banner: Banner
     name: str
-    releaseDate: date
+    release_date: date
     duration: str
     categories: List[Link[Category]]  
     producers: List[Producer]          
     trailer: str
     overview: str
-    streamingService: Optional[StreamingService] = None
+    streaming_service: Optional[StreamingService] = None
     cast: List[MovieCast]
     gallery: List[bytes]
-    countryOrigin: str
-    filmingLocation: str
-    productionCompanies: str
+    country_origin: str
+    filming_location: str
+    production_companies: str
     budget: str
-    grossProfit: str
+    gross_profit: str
 
     class Settings:
         name = "movies"
@@ -71,7 +71,7 @@ class Movie(Document):
     def generate_slug(self) -> "Movie":
         if not self.id:
             name_slug = self.name.lower().strip().replace(" ", "-")
-            year = self.releaseDate.year
+            year = self.release_date.year
             self.id = f"{name_slug}-{year}"
         return self
 

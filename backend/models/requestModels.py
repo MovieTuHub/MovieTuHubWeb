@@ -1,4 +1,4 @@
-from pydantic import EmailStr, Field, BaseModel, field_validator, model_validator
+from pydantic import EmailStr, Field, BaseModel, model_validator
 from datetime import date
 from typing import List, Optional
 from models.models import Banner, StreamingService, Producer
@@ -9,33 +9,36 @@ class CategoryRequest(BaseModel):
 
 class ActorRequest(BaseModel):
     name: str
-    image: str
+    image: Optional[bytes] = None
+
+    model_config = {"val_json_bytes":"base64"}
+
 
 class FilterRequest(BaseModel):
     categories: Optional[List[str]]
-    ratingMin: Optional[float] = Field(ge=1, le=5, decimal_places=1, max_digits=2)
-    ratingMax: Optional[float] = Field(ge=1, le=5, decimal_places=1, max_digits=2)
-    numOfRatingMin: Optional[int] = None
-    numOfRatingMax: Optional[int] = None
+    rating_min: Optional[float] = Field(ge=1, le=5, decimal_places=1, max_digits=2)
+    rating_max: Optional[float] = Field(ge=1, le=5, decimal_places=1, max_digits=2)
+    num_of_rating_min: Optional[int] = None
+    num_of_rating_max: Optional[int] = None
     cast: Optional[List[str]] = None
 
 
     @model_validator(mode="after")
     def validate_fields(self) -> "FilterRequest":
-        ratingMax = self.ratingMax
-        ratingMin = self.ratingMin
+        rating_max = self.rating_max
+        rating_min = self.rating_min
 
-        numOfRatingMax = self.numOfRatingMax
-        numOfRatingMin = self.numOfRatingMin
+        num_of_rating_max = self.num_of_rating_max
+        num_of_rating_min = self.num_of_rating_min
 
-        if (ratingMax< ratingMin):
+        if (rating_max< rating_min):
             raise ValueError("Max rating cannot be less than min rating")
         
-        if (numOfRatingMax< numOfRatingMin):
+        if (num_of_rating_max< num_of_rating_min):
             raise ValueError("Max number of ratings cannot be less than min number of ratings")
 
 class SearchMovieRequest(BaseModel):
-    searchPhrase: str
+    search_phrase: str
 
 class MovieCastRequest(BaseModel):
     actor: str
@@ -47,22 +50,22 @@ class StreamingServiceEnumRequest(BaseModel):
 
 class MovieRequest(BaseModel):
     banners: List[Banner]
-    mainPageBanner: Banner
+    main_page_banner: Banner
     name: str
-    releaseDate: date
+    release_date: date
     duration: str
     categories: str
     producers: List[Producer]          
     trailer: str
     overview: str
-    streamingService: Optional[StreamingService] = None
+    streaming_service: Optional[StreamingService] = None
     cast: List[MovieCastRequest]
     gallery: List[str]
-    countryOrigin: str
-    filmingLocation: str
-    productionCompanies: str
+    country_origin: str
+    filming_location: str
+    production_companies: str
     budget: str
-    grossProfit: str
+    gross_profit: str
 
     model_config = {"val_json_bytes":"base64"}
 
@@ -72,7 +75,6 @@ class ChangeBookmarkRequest(BaseModel):
     movie: str
     bookmark: bool
 
-# 4. USER, CREDENTIALS & REVIEWS COLLECTIONS
 
 class CreateUserRequest(BaseModel):
     image: Optional[bytes] = None
@@ -90,5 +92,5 @@ class ReviewRequest(BaseModel):
     score: int = Field(ge=1, le=5) 
     user: str
     title: str
-    reviewText: str
+    review_text: str
     movie: str

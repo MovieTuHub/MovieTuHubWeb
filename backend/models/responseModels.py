@@ -7,12 +7,12 @@ from models.models import Banner, Producer, StreamingService
 class ActorResponse(BaseModel):
     model_config = {"ser_json_bytes":"base64"}
 
-    id: str
+    id: PydanticObjectId
     name: str
     image: Optional[bytes] = None
 
 
-class MovieCastResponse(BaseModel):  # Fixed typo in name
+class MovieCastResponse(BaseModel): 
     model_config = {"ser_json_bytes":"base64"}
 
     actor: ActorResponse
@@ -22,8 +22,8 @@ class MovieCastResponse(BaseModel):  # Fixed typo in name
 class CategoryResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: str
-    category: str  # Fixed: Must match your database class attribute name
+    id: PydanticObjectId
+    category: str 
 
 
 class LoginResponse(BaseModel):
@@ -33,27 +33,27 @@ class LoginResponse(BaseModel):
     username: str
     image: Optional[bytes] = None
 
-    model_config = {"ser_json_bytes":"base64"}
+    model_config = {"ser_json_bytes":"base64","from_attributes":True}
 
 class SimpleMoviewResponse(BaseModel):
-    id: str
+    id: PydanticObjectId
     rating: float
     banner: bytes
     name: str
     duration: str
-    releaseDate: date
+    release_date: date
     director: str
-    isBookmaked: bool
+    is_bookmaked: bool
 
     model_config = {"ser_json_bytes":"base64"}
 
 
 class MainPageMovieResponse(BaseModel):
 
-    id: str
+    id: PydanticObjectId
     banners: List[bytes]
     name: str
-    isBookmaked: bool
+    is_bookmaked: bool
 
     model_config = {"ser_json_bytes":"base64"}
     
@@ -61,62 +61,58 @@ class ReviewResponse(BaseModel):
 
     score: int
     username: str
-    userImage: Optional[bytes] = None 
+    user_image: Optional[bytes] = None 
     title: str
-    reviewText: str
+    review_text: str
     movie: str
 
     model_config = {"ser_json_bytes":"base64"}
 
 
-# =====================================================================
-# 3. COMPREHENSIVE MOVIE RESPONSE MODEL
-# =====================================================================
-
 class MovieResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: str 
+    id: PydanticObjectId 
     banners: List[Banner]
-    mainPageBanner: Banner
+    main_page_banner: Banner
     name: str
-    releaseDate: date
+    release_date: date
     duration: str
     categories: List[CategoryResponse]  
     producers: List[Producer]          
     trailer: str
     overview: str
-    streamingService: Optional[StreamingService] = None
+    streaming_service: Optional[StreamingService] = None
     cast: List[MovieCastResponse]
     gallery: List[bytes] = []      
-    countryOrigin: str
-    filmingLocation: str
-    productionCompanies: str
+    country_origin: str
+    filming_location: str
+    production_companies: str
     budget: str
-    grossProfit: str
-    isBookmaked: bool
+    gross_profit: str
+    is_bookmaked: bool
 
     model_config = {"ser_json_bytes":"base64"}
     
 
 class MovieResponse(BaseModel):
-    id: str 
+    id: PydanticObjectId 
     banners: List[Banner]
-    mainPageBanner: Banner
+    main_page_banner: Banner
     name: str
-    releaseDate: date
+    release_date: date
     duration: str
     categories: List[CategoryResponse]  
     producers: List[Producer]          
     trailer: str
     overview: str
-    streamingService: Optional[StreamingService] = None
+    streaming_service: Optional[StreamingService] = None
     cast: List[MovieCastResponse]
     gallery: List[bytes] = []
-    countryOrigin: str
-    filmingLocation: str
-    productionCompanies: str
+    country_origin: str
+    filming_location: str
+    production_companies: str
     budget: str
-    grossProfit: str
+    gross_profit: str
 
     model_config = {"ser_json_bytes":"base64"}

@@ -4,7 +4,8 @@ from fastapi import FastAPI
 from dotenv import load_dotenv
 from logger import create_logger
 from models.requestModels import *
-from controllers.authController import authRouter
+from controllers.authController import auth_router
+from controllers.actorController import actor_controller
 from contextlib import asynccontextmanager
 from components.func import init_db
 
@@ -20,7 +21,8 @@ async def start_db(app: FastAPI):
 
 app = FastAPI(lifespan=start_db)
 
-app.include_router(authRouter)
+app.include_router(auth_router)
+app.include_router(actor_controller)
 
 @app.get("/")
 async def hello():
