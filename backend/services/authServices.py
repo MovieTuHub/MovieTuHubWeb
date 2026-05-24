@@ -7,7 +7,7 @@ from models.models import User, Credential
 from models.requestModels import CreateUserRequest, LoginRequest
 
 
-async def add_user(request: CreateUserRequest)-> JSONResponse:
+async def add_user(request: CreateUserRequest):
 
     existing_users = await Credential.find(Credential.email == request.email).to_list()
 
@@ -29,9 +29,9 @@ async def add_user(request: CreateUserRequest)-> JSONResponse:
 
     await credentials.create()
 
-    return JSONResponse(status_code=status.HTTP_201_CREATED,content={"message":"User created!"})
+    return {"message":"User created!"}
 
-async def login_user(request:LoginRequest) -> JSONResponse:
+async def login_user(request:LoginRequest):
     user_credentials = await Credential.find_one(Credential.email == request.email)
 
     if (user_credentials == None):
@@ -48,5 +48,5 @@ async def login_user(request:LoginRequest) -> JSONResponse:
     
     user = await user_credentials.user.fetch()
 
-    response = LoginResponse(id=user.id,username=user.username, image=user.image)
-    return JSONResponse(status_code=status.HTTP_200_OK,content=jsonable_encoder(response))
+    response = LoginResponse(**user.model_dump())
+    return jsonable_encoder(response)
