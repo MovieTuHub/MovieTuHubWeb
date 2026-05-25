@@ -1,8 +1,8 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from fastapi import status
+from fastapi import UploadFile, status
 from models.responseModels import ActorResponse
 from models.models import Actor
 from models.requestModels import ActorRequest
@@ -12,16 +12,32 @@ from logger import create_logger
 
 logger = create_logger(__name__)
 
-async def create_actor_document(request: ActorRequest)-> JSONResponse:
+async def create_actor_document(name: str,
+                    image: Optional[UploadFile] = None)-> JSONResponse:
     try:
-        existing_actors = await Actor.find(Actor.name == request.name).to_list()
+        existing_actors = await Actor.find(Actor.name == name).to_list()
 
         if (len(existing_actors)>0):
             return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"message":"The actor already exists"})
 
-        actor = Actor(**request.model_dump())
+        actor = Actor(name = name)
 
         await actor.create()
+
+        if (image):
+            image_data = await image.read()
+            image_file = image.filename.strip().split(".")
+            image_file[0] = f"actor_{str(actor.id)}"
+            image_file = ".".join(image_file)
+            with open(f"data/actors/{image_file}","wb") as f:
+                f.write(image_data)
+            
+        else:
+            image_file = None
+
+        actor.image = image_file
+        
+        await actor.save()
 
         logger.info("Actor created!")
 

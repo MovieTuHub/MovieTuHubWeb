@@ -37,7 +37,7 @@ class Category(Document):
 
 class Actor(Document):
     name: str
-    image: Optional[bytes] = None
+    image: Optional[str] = None
 
     class Settings:  
         name = "actors"

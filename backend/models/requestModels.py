@@ -8,7 +8,7 @@ from models.models import Banner, MovieMainPageCollections, StreamingService, Pr
 class CategoryRequest(BaseModel):
     category: str
 
-
+# ! DEPRECATED !
 class ActorRequest(BaseModel):
     name: str
     image: Optional[bytes] = None

@@ -2,14 +2,14 @@ from datetime import date
 from typing import List, Optional
 from beanie import PydanticObjectId
 from pydantic import BaseModel, ConfigDict
-from models.models import Banner, Producer, StreamingService
+from models.models import Producer, StreamingService
 
 class ActorResponse(BaseModel):
     model_config = {"ser_json_bytes":"base64"}
 
     id: PydanticObjectId
     name: str
-    image: Optional[bytes] = None
+    image: Optional[str] = None
 
 
 class MovieCastResponse(BaseModel): 
