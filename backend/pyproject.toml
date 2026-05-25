@@ -9,5 +9,6 @@ dependencies = [
     "beanie>=2.1.0",
     "fastapi[standard,standart]>=0.136.1",
     "pymongo>=4.17.0",
+    "python-multipart>=0.0.29",
     "uvicorn>=0.47.0",
 ]

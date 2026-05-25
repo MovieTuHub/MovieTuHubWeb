@@ -72,9 +72,10 @@ class ReviewResponse(BaseModel):
 class MovieResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
-    id: PydanticObjectId 
-    banners: List[Banner]
-    main_page_banner: Banner
+    id: str 
+    backdrops: List[str]
+    posters: List[str]
+    main_page_banner: str
     name: str
     release_date: date
     duration: str
@@ -84,35 +85,9 @@ class MovieResponse(BaseModel):
     overview: str
     streaming_service: Optional[StreamingService] = None
     cast: List[MovieCastResponse]
-    gallery: List[bytes] = []      
-    country_origin: str
-    filming_location: str
-    production_companies: str
+    gallery: List[str] = []      
+    country_origin: List[str]
+    filming_location: List[str]
+    production_companies: List[str]
     budget: str
-    gross_profit: str
-    is_bookmaked: bool
-
-    model_config = {"ser_json_bytes":"base64"}
-    
-
-class MovieResponse(BaseModel):
-    id: PydanticObjectId 
-    banners: List[Banner]
-    main_page_banner: Banner
-    name: str
-    release_date: date
-    duration: str
-    categories: List[CategoryResponse]  
-    producers: List[Producer]          
-    trailer: str
-    overview: str
-    streaming_service: Optional[StreamingService] = None
-    cast: List[MovieCastResponse]
-    gallery: List[bytes] = []
-    country_origin: str
-    filming_location: str
-    production_companies: str
-    budget: str
-    gross_profit: str
-
-    model_config = {"ser_json_bytes":"base64"}
+    gross_profit: str    

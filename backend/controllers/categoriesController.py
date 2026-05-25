@@ -7,7 +7,7 @@ categories_router = APIRouter(prefix="/categories",tags=["categories"])
 
 @categories_router.post(path="/",status_code=status.HTTP_201_CREATED, response_class=JSONResponse)
 async def create_category(request: CategoryRequest):
-    return await add_catergory(request)
+    return await create_category_document(request)
 
 @categories_router.get(path="/",status_code=status.HTTP_200_OK,response_class=JSONResponse)
 async def get_all_categories():

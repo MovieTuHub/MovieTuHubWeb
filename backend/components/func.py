@@ -1,3 +1,4 @@
+import os
 import pymongo
 from logger import create_logger
 from beanie import init_beanie
@@ -11,3 +12,12 @@ async def init_db(db_string: str):
     await init_beanie(database=client.db_name, document_models=MODELS)
 
     logger.info("Database is set")
+
+def create_data_file_structure():
+    if ("data" not in os.listdir()):
+        os.mkdir("data")
+        os.mkdir("data/movies")
+        os.mkdir("data/avatars")
+        logger.info("Created file system")
+    else:
+        logger.info("File system already exists")

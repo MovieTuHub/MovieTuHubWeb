@@ -8,25 +8,38 @@ from models.requestModels import CategoryRequest
 from models.models import Category
 from models.responseModels import CategoryResponse
 
-async def add_catergory(request:CategoryRequest) -> JSONResponse:
-    existing_categoty = await Category.find_one(Category.category == request.category.title())
+from logger import create_logger
 
-    if (existing_categoty):
-        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"message":"The category already exists"})
-    
-    category = Category(**request.model_dump())
+logger = create_logger(__name__)
 
-    await category.save()
+async def create_category_document(request:CategoryRequest) -> JSONResponse:
+    try:
+        existing_categoty = await Category.find_one(Category.category == request.category.title())
 
-    response = CategoryResponse(**category.model_dump())
+        if (existing_categoty):
+            return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content={"message":"The category already exists"})
+        
+        category = Category(**request.model_dump())
 
-    return response
+        await category.save()
+
+        response = CategoryResponse(**category.model_dump())
+
+        return response
+    except Exception as e:
+        logger.error(e)
+        raise e
 
 async def get_categories()->JSONResponse:
-    categories = await Category.all().to_list()
-    list_type = TypeAdapter(List[CategoryResponse])
+    try:
+        categories = await Category.all().to_list()
+        list_type = TypeAdapter(List[CategoryResponse])
 
-    response = list_type.validate_python(categories,from_attributes=True)
-    return response
+        response = list_type.validate_python(categories,from_attributes=True)
+        return response
+    except Exception as e:
+            logger.error(e)
+            raise e
+
 
     

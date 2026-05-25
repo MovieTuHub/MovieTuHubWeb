@@ -4,12 +4,16 @@ from enum import Enum
 from beanie import Link, Document
 from typing import List, Optional
 
-# 1. ENUMS & EMBEDDED SCHEMAS (BaseModels - No Collections)
-
 class StreamingServiceEnum(Enum):
     NETFLIX = "Netflix"
     APPLE_TV = "Apple TV"
     DISNEY_PLUS = "Disney +"
+
+class MovieMainPageCollections(Enum):
+    ALL_TIMERS = "All Timers"
+    UPCOMING = "Upcoming"
+    ONES_TO_WATCH = "Ones to watch"
+    HERO_BANNER = "Hero Banner"
 
 class StreamingService(BaseModel):
     service: StreamingServiceEnum
@@ -20,8 +24,8 @@ class Producer(BaseModel):
     producer_role: List[str]
 
 class Banner(BaseModel):
-    backdrop: bytes
-    poster: bytes
+    backdrop_directory: str
+    poster_direcotry: str
 
 # 2. STANDALONE COLLECTIONS (Documents)
 
@@ -46,8 +50,10 @@ class MovieCast(BaseModel):
 
 class Movie(Document):
     id: str = Field(default=None, alias="_id") 
-    banners: List[Banner]
-    main_page_banner: Banner
+    backdrops: List[str]
+    posters: List[str]
+    main_page_banner: str
+    main_page_collections: List[MovieMainPageCollections] = []
     name: str
     release_date: date
     duration: str
@@ -57,10 +63,10 @@ class Movie(Document):
     overview: str
     streaming_service: Optional[StreamingService] = None
     cast: List[MovieCast]
-    gallery: List[bytes]
-    country_origin: str
-    filming_location: str
-    production_companies: str
+    gallery: List[str]
+    country_origin: List[str]
+    filming_location: List[str]
+    production_companies: List[str]
     budget: str
     gross_profit: str
 
