@@ -61,3 +61,11 @@ async def get_movie(slug):
 @movie_router.get(path="/simple_presentation",status_code=status.HTTP_200_OK,response_class=JSONResponse)
 async def get_all_movies_simple():
     return await get_movies_simple()
+
+@movie_router.get(path="/main_page",status_code=status.HTTP_200_OK,response_class=JSONResponse)
+async def get_all_movies_main_page_collection(collection: MovieMainPageCollections):
+    return await get_movies_main_page(collection)
+
+@movie_router.get(path="/hero",status_code=status.HTTP_200_OK,response_class=JSONResponse)
+async def get_all_movies_main_page_collection():
+    return await get_movies_hero_banner()

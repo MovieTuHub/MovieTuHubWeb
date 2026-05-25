@@ -3,7 +3,7 @@ from fastapi import File, Form, UploadFile
 from pydantic import EmailStr, Field, BaseModel, model_validator
 from datetime import date
 from typing import Annotated, List, Optional
-from models.models import Banner, MovieMainPageCollections, StreamingService, Producer
+from models.models import StreamingService
 
 class CategoryRequest(BaseModel):
     category: str

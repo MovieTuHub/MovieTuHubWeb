@@ -9,6 +9,10 @@ class StreamingServiceEnum(Enum):
     APPLE_TV = "Apple TV"
     DISNEY_PLUS = "Disney +"
 
+class ProducerRoleEnum(Enum):
+    DIRECTOR = "Director"
+    WRITER = "Writer"
+
 class MovieMainPageCollections(Enum):
     ALL_TIMERS = "All Timers"
     UPCOMING = "Upcoming"
@@ -21,7 +25,7 @@ class StreamingService(BaseModel):
 
 class Producer(BaseModel):
     name: str
-    producer_role: List[str]
+    producer_role: List[ProducerRoleEnum]
 
 class Banner(BaseModel):
     backdrop_directory: str

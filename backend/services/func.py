@@ -1,7 +1,7 @@
 from typing import List
 
-from models.models import Movie
-from models.responseModels import ActorResponse, MovieCastResponse, MovieResponse, SimpleMovieResponse
+from models.models import Movie, ProducerRoleEnum
+from models.responseModels import ActorResponse, HeroBannerMovieResponse, MainPageMovieResponse, MovieCastResponse, MovieResponse, SimpleMovieResponse
 
 
 def image_to_bytes(images:List[str],file_path:str) -> List[bytes]:
@@ -44,10 +44,30 @@ def create_simple_movie_response_with_images(movie: Movie):
     banner = image_to_bytes([movie.posters[0]],f"data/movies/{movie.id}/posters")[0]
     
     for producer in movie.producers:
-        if ("Director" in producer.producer_role):
+        if (ProducerRoleEnum.DIRECTOR in producer.producer_role):
             director = producer
             break 
     movie_response = SimpleMovieResponse(**movie.model_dump(),
                                     banner=banner,
                                     director = director.name)
+    return movie_response
+
+def create_main_page_movie_response_with_images(movie: Movie):
+
+    banners = image_to_bytes(movie.posters[:2],f"data/movies/{movie.id}/posters")
+
+    movie_response = MainPageMovieResponse(**movie.model_dump(),
+                                    banners=banners,
+                                    )
+    return movie_response
+
+def create_hero_banner_movie_response_with_images(movie: Movie):
+
+    banner = image_to_bytes([movie.main_page_banner],f"data/movies/{movie.id}/homepage_poster")[0]
+    backdrop = image_to_bytes(movie.backdrops[:1],f"data/movies/{movie.id}/backdrops")[0]
+
+    movie_response = HeroBannerMovieResponse(**movie.model_dump(),
+                                    banner=banner,
+                                    backdrop=backdrop
+                                    )
     return movie_response

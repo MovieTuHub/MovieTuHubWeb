@@ -5,13 +5,14 @@ import shutil
 from typing import Annotated, List, Optional
 import ast
 from beanie import PydanticObjectId
+from beanie.operators import In
 from fastapi import File, Form, UploadFile, status
 from fastapi.responses import JSONResponse
 from pydantic import TypeAdapter
 from models.models import Category, Movie, MovieMainPageCollections, Producer, Actor, MovieCast, StreamingService
 from models.requestModels import MovieCastRequest
 from models.responseModels import ActorResponse, CreateMovieResponse, MovieCastResponse, MovieResponse
-from services.func import create_movie_response_with_images, create_simple_movie_response_with_images
+from services.func import create_hero_banner_movie_response_with_images, create_main_page_movie_response_with_images, create_movie_response_with_images, create_simple_movie_response_with_images
 
 from logger import create_logger
 
@@ -196,6 +197,34 @@ async def get_movies_simple() ->JSONResponse:
 
         for movie in movies:
             response.append(create_simple_movie_response_with_images(movie))
+
+        return response
+    except Exception as e:
+        logger.error(e)
+        raise e
+    
+async def get_movies_main_page(collection: MovieMainPageCollections) ->JSONResponse:
+    try:
+        movies = await Movie.find(Movie.main_page_collections == collection.value,fetch_links=True).to_list()
+
+        response = []
+
+        for movie in movies:
+            response.append(create_main_page_movie_response_with_images(movie))
+
+        return response
+    except Exception as e:
+        logger.error(e)
+        raise e
+
+async def get_movies_hero_banner() ->JSONResponse:
+    try:
+        movies = await Movie.find(Movie.main_page_collections == MovieMainPageCollections.HERO_BANNER.value,fetch_links=True).to_list()
+
+        response = []
+
+        for movie in movies:
+            response.append(create_hero_banner_movie_response_with_images(movie))
 
         return response
     except Exception as e:

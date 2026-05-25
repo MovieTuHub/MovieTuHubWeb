@@ -76,9 +76,22 @@ class MainPageMovieResponse(BaseModel):
     id: str
     banners: List[bytes]
     name: str
-    is_bookmaked: bool
+    # is_bookmaked: bool
 
-    model_config = {"ser_json_bytes":"base64"}
+    @field_serializer("banners")
+    def serialize_bytes(self, file_bytes: List[bytes]):
+        return [base64.b64encode(v) for v in file_bytes]
+    
+class HeroBannerMovieResponse(BaseModel):
+
+    id: str
+    banner: bytes
+    backdrop: bytes
+
+    @field_serializer("banner","backdrop")
+    def serialize_bytes(self, file_bytes: bytes):
+        return base64.b64encode(file_bytes)
+    
     
 class ReviewResponse(BaseModel):
 
