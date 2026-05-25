@@ -1,16 +1,35 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
-const Link = ({href = "", fontWeight = 20, text = "", isUnderlined = false}) => {
+interface LinkProps {
+  href?: string;
+  fontSize?: number;
+  fontWeight?: string;
+  text?: string;
+  isUnderlined?: boolean;
+  textIsCentered?: boolean;
+  children?: ReactNode;
+}
+
+const Link = ({
+  href = "",
+  fontSize = 20,
+  fontWeight = "",
+  text = "",
+  isUnderlined = false,
+  textIsCentered = false,
+  children}: LinkProps
+) => {
   return (
     <div>
         <a href={href}
+            style={{fontSize: `${fontSize}px`, fontWeight: fontWeight}}
             className={`text-white transition-colors
                 hover:text-[#4a5ac2] duration-200
                 active:text-[#707594] active:duration-75
-                text-[${fontWeight}px]
-                ${isUnderlined ? "underline" : ""}`}
+                ${isUnderlined ? "underline" : ""}
+                ${textIsCentered ? "block text-center" : ""}`}
         >
-            {text}
+            {children || text}
         </a>
     </div>
   )

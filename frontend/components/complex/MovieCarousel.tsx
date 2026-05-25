@@ -1,0 +1,70 @@
+"use client"
+
+import React from 'react'
+import { useState } from 'react'
+import Image from 'next/image'
+import NextButton from '../buttons/NextButton'
+import CarouselDots from '../buttons/CarouselDots'
+
+interface MovieCarouselProps {
+    movieLogos: Array<string>;
+    images: Array<string>;
+    className?: string;
+}
+
+const MovieCarousel = ({ movieLogos = [], images = [], className }: MovieCarouselProps) => {
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const currentImage = images[currentSlide];
+    const currentLogo = movieLogos[currentSlide];
+
+    const handleSlideChange = (index: number) => {
+        setCurrentSlide(index);
+    }
+
+    const handlePrev = () => {
+        setCurrentSlide(() => currentSlide === 0 ? images.length - 1 : currentSlide - 1)
+    }
+
+    const handleNext = () => {
+        setCurrentSlide(() => currentSlide === images.length - 1 ? 0 : currentSlide + 1)
+    }
+
+    return (
+        <div className={
+            `relative w-full h-125 overflow-hidden
+            flex flex-col justify-between`
+        }>
+            <div className="-z-50 w-full">
+                <Image
+                    alt="Movie logo"
+                    width={300}
+                    height={300}
+                    src={currentLogo}
+                    className="absolute left-48 bottom-16 z-10 max-w-75 max-h-75"
+                />
+                <Image
+                    key={currentSlide}
+                    alt="Movie banner carousel"
+                    fill
+                    src={currentImage}
+                    className="object-cover object-top transition-opacity duration-200"
+                    priority
+                />
+            </div>
+            <div className="flex justify-center w-screen gap-x-[80%] mt-10">
+                <NextButton onClick={handlePrev} isFlipped />
+                <NextButton onClick={handleNext} />
+            </div>
+            <div className="mb-10">
+                <CarouselDots
+                    dotsSize={20}
+                    currentSlide={currentSlide}
+                    totalSlides={images.length}
+                    onChangeSlide={handleSlideChange}
+                />
+            </div>
+        </div>
+    )
+}
+
+export default MovieCarousel

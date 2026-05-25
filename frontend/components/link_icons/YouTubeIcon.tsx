@@ -1,7 +1,7 @@
 import React from 'react'
 import { FiYoutube } from 'react-icons/fi'
 
-const YouTubeIcon = ({size = 75, link = ""}) => {
+const YouTubeIcon = ({size = 75, link = "", href = ""}) => {
   return (
     <a href={link}>
         <FiYoutube

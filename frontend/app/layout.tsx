@@ -1,20 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
-import Button from "@/components/buttons/Button";
-import CloseButton from "@/components/buttons/CloseButton";
-import MoviePoster from "@/components/interractibles/MoviePoster";
-import CastBanner from "@/components/static/CastBanner";
-import NextButton from "@/components/buttons/NextButton";
-import Review from "@/components/static/Review";
-import PlayButton from "@/components/buttons/PlayButton";
-import SortOrderButton from "@/components/buttons/SortOrderButton";
-import Footer from "@/components/Footer";
-import CheckBox from "@/components/interractibles/CheckBox";
-import ToggleButton from "@/components/interractibles/ToggleButton";
-import Delimiter from "@/components/static/Delimiter";
-import CategoryDelimiter from "@/components/static/CategoryDelimiter";
-import StarRating from "@/components/interractibles/StarRating";
 
 export const metadata: Metadata = {
   title: "MovieTuHub",
@@ -30,7 +16,7 @@ export default function RootLayout({
     <html
       lang="en">
       <body className="min-h-full flex flex-col">
-        <NavBar />
+        <NavBar logoHref="/main-page"/>
 
         {children}
       </body>

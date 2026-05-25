@@ -10,12 +10,13 @@ const SearchBar = ({width = 500, placeholder = "Search"}) => {
                 width: `clamp(${Math.min(200, width * 0.4)}px, 35vw, ${width}px)`,
                 height: 35
             }}
-            className="
+            className={`
                 border border-black rounded-full
                 flex items-center px-6.25
                 bg-white transition-colors
                 hover:bg-[#e0e0e0] duration-200
-                focus:outline-0">
+                focus:outline-0`
+            }>
         </input>
     </div>
   )
