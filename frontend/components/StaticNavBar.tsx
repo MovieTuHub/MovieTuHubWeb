@@ -7,28 +7,17 @@ import MenuButton from "./buttons/MenuButton"
 import NavBarButton from "./buttons/NavBarButton"
 import SearchBar from "./interractibles/SearchBar"
 
-const NavBar = () => {
+const NavBar = ({logoHref = ""}) => {
     const [activeForm, setActiveForm] = useState<null | "login" | "signup" | "forgot">(null);
-    const [isScrolled, setIsScrolled] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => setIsScrolled(window.scrollY > 420);
-
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
 
     return (
         <div className={`w-full py-1 px-15 z-50 fixed top-0 right-0 left-0
-            transition-all duration-200
-            ${isScrolled
-                ? "bg-background shadow-[0px_5px_5px_2px_#00000040]"
-                : "bg-transparent hover:bg-background hover:shadow-[0px_5px_5px_2px_#00000040]"
-            }`}>
+            bg-background hover:shadow-[0px_5px_5px_2px_#00000040]
+            transition-all duration-200`}>
             <div className="flex flex-row justify-between items-center gap-x-2 max-h-12.5">
                 <div className="flex flex-row gap-x-3 shrink-0">
                     <MenuButton />
-                    <a href = "/pages/main-page" className="flex">
+                    <a href = {logoHref} className="flex">
                         <Image
                             src='/MovieTuHub_new.png'
                             height={50}
@@ -40,7 +29,7 @@ const NavBar = () => {
                     </a>
                 </div>
                 <div className="justify-self-center"><SearchBar /></div>
-                <a href="/forms/login-form"><NavBarButton text="Login" className="justify-self-end"/></a>
+                <a href="/login-form"><NavBarButton text="Login" className="justify-self-end"/></a>
             </div>
         </div>
     )

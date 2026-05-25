@@ -21,7 +21,7 @@ const page = () => {
         ]}
       />
       <div className="absolute w-full h-20 top-105
-        bg-linear-to-t from-[#000d60] to-transparent">
+        bg-linear-to-t from-background to-transparent">
       </div>
       <div className="flex flex-col gap-y-16 pb-20">
         <MovieCategory

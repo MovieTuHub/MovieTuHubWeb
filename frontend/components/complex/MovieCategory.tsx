@@ -41,6 +41,7 @@ const MovieCategory = ({ text, imagesDef, imagesHover, movieTitles }: MovieCateg
                                 defaultSrc={imagesDef[(startIndex + index) % imagesDef.length]}
                                 hoverSrc={imagesHover[(startIndex + index) % imagesDef.length]}
                                 movieTitle={movieTitles[(startIndex + index) % imagesDef.length]}
+                                href="/pages/movie-page"
                             />
                         })
                     }
