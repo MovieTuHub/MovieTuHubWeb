@@ -5,10 +5,12 @@ from dotenv import load_dotenv
 from logger import create_logger
 from models.requestModels import *
 from controllers.authController import auth_router
-from controllers.actorController import actor_controller
-from controllers.categoriesCoontroller import categories_router
+from controllers.actorsController import actor_controller
+from controllers.categoriesController import categories_router
+from controllers.movieController import movie_router
+
 from contextlib import asynccontextmanager
-from components.func import init_db
+from components.func import init_db, create_data_file_structure
 
 logger = create_logger(__name__)
 
@@ -18,6 +20,7 @@ load_dotenv("./conf/.env")
 async def start_db(app: FastAPI):
     db_string = os.getenv("MONGO_DB_STRING")
     await init_db(db_string)
+    create_data_file_structure()
     yield
 
 app = FastAPI(lifespan=start_db)
@@ -25,6 +28,7 @@ app = FastAPI(lifespan=start_db)
 app.include_router(auth_router)
 app.include_router(actor_controller)
 app.include_router(categories_router)
+app.include_router(movie_router)
 
 @app.get("/")
 async def hello():

@@ -1,12 +1,14 @@
+from beanie import PydanticObjectId
+from fastapi import File, Form, UploadFile
 from pydantic import EmailStr, Field, BaseModel, model_validator
 from datetime import date
-from typing import List, Optional
-from models.models import Banner, StreamingService, Producer
+from typing import Annotated, List, Optional
+from models.models import StreamingService
 
 class CategoryRequest(BaseModel):
     category: str
 
-
+# ! DEPRECATED !
 class ActorRequest(BaseModel):
     name: str
     image: Optional[bytes] = None
@@ -41,33 +43,34 @@ class SearchMovieRequest(BaseModel):
     search_phrase: str
 
 class MovieCastRequest(BaseModel):
-    actor: str
+    actor: PydanticObjectId
     role: str
 
 class StreamingServiceEnumRequest(BaseModel):
     service: str 
     link: str
 
-class MovieRequest(BaseModel):
-    banners: List[Banner]
-    main_page_banner: Banner
-    name: str
-    release_date: date
-    duration: str
-    categories: str
-    producers: List[Producer]          
-    trailer: str
-    overview: str
-    streaming_service: Optional[StreamingService] = None
-    cast: List[MovieCastRequest]
-    gallery: List[str]
-    country_origin: str
-    filming_location: str
-    production_companies: str
-    budget: str
-    gross_profit: str
-
-    model_config = {"val_json_bytes":"base64"}
+# ! DEPRECATED !
+class MovieRequest(BaseModel): 
+    backdrops: Annotated[List[UploadFile],File()]
+    posters: Annotated[List[UploadFile],File()]
+    main_page_banner: UploadFile
+    main_page_collections: Annotated[str,Form()]
+    name: Annotated[str,Form()]
+    release_date: Annotated[date,Form()]
+    duration: Annotated[str,Form()]
+    categories: Annotated[List[PydanticObjectId],Form()]
+    producers: Annotated[List[str],Form()]     # Convert to List of Producers     
+    trailer: Annotated[str,Form()]
+    overview: Annotated[str,Form()]
+    streaming_service: Annotated[Optional[StreamingService],Form()] = None
+    cast: Annotated[List[str],Form()] # Convert to List of MovieCastRequst
+    gallery: Annotated[List[UploadFile],File()]
+    country_origin: Annotated[List[str],Form()]
+    filming_location: Annotated[List[str],Form()]
+    production_companies: Annotated[List[str],Form()]
+    budget: Annotated[str,Form()]
+    gross_profit: Annotated[str,Form()]
 
 
 class ChangeBookmarkRequest(BaseModel):
@@ -75,7 +78,7 @@ class ChangeBookmarkRequest(BaseModel):
     movie: str
     bookmark: bool
 
-
+# ! Deprecated !
 class CreateUserRequest(BaseModel):
     image: Optional[bytes] = None
     email: EmailStr

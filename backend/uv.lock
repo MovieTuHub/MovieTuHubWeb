@@ -41,6 +41,7 @@ dependencies = [
     { name = "beanie" },
     { name = "fastapi", extra = ["standard"] },
     { name = "pymongo" },
+    { name = "python-multipart" },
     { name = "uvicorn" },
 ]
 
@@ -50,6 +51,7 @@ requires-dist = [
     { name = "beanie", specifier = ">=2.1.0" },
     { name = "fastapi", extras = ["standard", "standart"], specifier = ">=0.136.1" },
     { name = "pymongo", specifier = ">=4.17.0" },
+    { name = "python-multipart", specifier = ">=0.0.29" },
     { name = "uvicorn", specifier = ">=0.47.0" },
 ]
 
