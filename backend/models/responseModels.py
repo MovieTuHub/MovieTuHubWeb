@@ -56,22 +56,24 @@ class LoginResponse(BaseModel):
         return base64.b64encode(file_bytes)
 
 
-class SimpleMoviewResponse(BaseModel):
-    id: PydanticObjectId
-    rating: float
+class SimpleMovieResponse(BaseModel):
+    id: str
+    # rating: float
     banner: bytes
     name: str
     duration: str
     release_date: date
     director: str
-    is_bookmaked: bool
+    # is_bookmaked: bool
 
-    model_config = {"ser_json_bytes":"base64"}
+    @field_serializer('banner')
+    def serialize_bytes(self, file_bytes: bytes|None):
+        return base64.b64encode(file_bytes)
 
 
 class MainPageMovieResponse(BaseModel):
 
-    id: PydanticObjectId
+    id: str
     banners: List[bytes]
     name: str
     is_bookmaked: bool

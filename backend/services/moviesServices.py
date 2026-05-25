@@ -11,7 +11,7 @@ from pydantic import TypeAdapter
 from models.models import Category, Movie, MovieMainPageCollections, Producer, Actor, MovieCast, StreamingService
 from models.requestModels import MovieCastRequest
 from models.responseModels import ActorResponse, CreateMovieResponse, MovieCastResponse, MovieResponse
-from services.func import image_to_bytes
+from services.func import create_movie_response_with_images, create_simple_movie_response_with_images
 
 from logger import create_logger
 
@@ -169,36 +169,33 @@ async def get_movies() ->JSONResponse:
         response = []
 
         for movie in movies:
-            backdrops = image_to_bytes(movie.backdrops,f"data/movies/{movie.id}/backdrops")
-            posters = image_to_bytes(movie.posters,f"data/movies/{movie.id}/posters")
-            gallery = image_to_bytes(movie.gallery,f"data/movies/{movie.id}/gallery")
+            response.append(create_movie_response_with_images(movie))
 
-            cast_processed = []
+        return response
+    except Exception as e:
+        logger.error(e)
+        raise e
+    
+async def get_single_movie(slug) -> JSONResponse:
+    try:
+        movie = await Movie.find_one(Movie.id == slug,fetch_links=True)
 
-            for cast in movie.cast:
-                if (cast.actor.image):
-                    actor_image = image_to_bytes([cast.actor.image],"data/actors")[0]
-                else:
-                    actor_image = None
-                
-                actor_response = ActorResponse(**cast.actor.model_dump(exclude={"image"}),image=actor_image)
-                movie_cast_response = MovieCastResponse(
-                    **cast.model_dump(exclude={"actor"}),
-                    actor=actor_response
-                )
+        if (not movie):
+            return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,content={"message":"The movie is not found"})
+        
+        return create_movie_response_with_images(movie)
+    except Exception as e:
+        logger.error(e)
+        raise e
+    
+async def get_movies_simple() ->JSONResponse:
+    try:
+        movies = await Movie.find_all(fetch_links=True).to_list()
 
-                cast_processed.append(movie_cast_response)
+        response = []
 
-            movie_response = MovieResponse(**movie.model_dump(exclude={"backdrops","posters","gallery","cast"}),
-                                           backdrops=backdrops,
-                                           posters=posters,
-                                           gallery=gallery,
-                                           cast=cast_processed)
-            response.append(movie_response)
-            # cast_processed = []
-
-            # for cast in movie.cast:
-            #     cast_processed.append(image_to_base64([cast.actor.image],"data/actors"))
+        for movie in movies:
+            response.append(create_simple_movie_response_with_images(movie))
 
         return response
     except Exception as e:

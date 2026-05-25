@@ -53,3 +53,11 @@ async def create_movie( backdrops: list[UploadFile]=File(...),
 @movie_router.get(path="/",status_code=status.HTTP_200_OK,response_class=JSONResponse)
 async def get_all_movies():
     return await get_movies()
+
+@movie_router.get(path="/",status_code=status.HTTP_200_OK,response_class=JSONResponse)
+async def get_movie(slug):
+    return await get_single_movie(slug)
+
+@movie_router.get(path="/simple_presentation",status_code=status.HTTP_200_OK,response_class=JSONResponse)
+async def get_all_movies_simple():
+    return await get_movies_simple()
