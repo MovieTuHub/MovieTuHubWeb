@@ -31,20 +31,23 @@ async def create_user_document(
         generated_salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw(encoded_password,salt=generated_salt)
 
+        user = User(username=username)
+        await user.create()
+
         if (image):
             image_data = await image.read()
-            
-            with open(f"data/users/{image.filename}","wb") as f:
+            image_file = image.filename.strip().split(".")
+            image_file[0] = f"user_{str(user.id)}"
+            image_file = ".".join(image_file)
+            with open(f"data/users/{image_file}","wb") as f:
                 f.write(image_data)
             
-            image_file = image.filename
         else:
             image_file = None
 
-        user = User(username=username,
-                    image = image_file)
+        user.image = image_file
         
-        await user.create()
+        await user.save()
 
         credentials = Credential(email=email,password=hashed_password,user=user)
 
