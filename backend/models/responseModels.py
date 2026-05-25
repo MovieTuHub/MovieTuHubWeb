@@ -1,10 +1,11 @@
+import base64
 from datetime import date
 from typing import List, Optional
 from beanie import PydanticObjectId
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_serializer
 from models.models import Producer, StreamingService
 
-class ActorResponse(BaseModel):
+class CreateActorResponse(BaseModel):
     model_config = {"ser_json_bytes":"base64"}
 
     id: PydanticObjectId
@@ -12,8 +13,23 @@ class ActorResponse(BaseModel):
     image: Optional[str] = None
 
 
+class ActorResponse(BaseModel):
+    id: PydanticObjectId
+    name: str
+    image: Optional[bytes] = None
+
+    @field_serializer('image')
+    def serialize_bytes(self, file_bytes: bytes|None):
+        if (file_bytes is None):
+            return None
+        return base64.b64encode(file_bytes)
+
+class CreateMovieCastResponse(BaseModel): 
+
+    actor: CreateActorResponse
+    role: str
+
 class MovieCastResponse(BaseModel): 
-    model_config = {"ser_json_bytes":"base64"}
 
     actor: ActorResponse
     role: str
@@ -31,9 +47,14 @@ class LoginResponse(BaseModel):
 
     id: PydanticObjectId
     username: str
-    image: Optional[str] = None
+    image: Optional[bytes] = None
 
-    model_config = {"ser_json_bytes":"base64","from_attributes":True}
+    @field_serializer('image')
+    def serialize_bytes(self, file_bytes: bytes|None):
+        if (file_bytes is None):
+            return None
+        return base64.b64encode(file_bytes)
+
 
 class SimpleMoviewResponse(BaseModel):
     id: PydanticObjectId
@@ -69,7 +90,7 @@ class ReviewResponse(BaseModel):
     model_config = {"ser_json_bytes":"base64"}
 
 
-class MovieResponse(BaseModel):
+class CreateMovieResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: str 
@@ -84,10 +105,38 @@ class MovieResponse(BaseModel):
     trailer: str
     overview: str
     streaming_service: Optional[StreamingService] = None
-    cast: List[MovieCastResponse]
+    cast: List[CreateMovieCastResponse]
     gallery: List[str] = []      
     country_origin: List[str]
     filming_location: List[str]
     production_companies: List[str]
     budget: str
     gross_profit: str    
+
+
+class MovieResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: str 
+    backdrops: List[bytes]
+    posters: List[bytes]
+    name: str
+    release_date: date
+    duration: str
+    categories: List[CategoryResponse]  
+    producers: List[Producer]          
+    trailer: str
+    overview: str
+    streaming_service: Optional[StreamingService] = None
+    cast: List[MovieCastResponse]
+    gallery: List[bytes] = []      
+    country_origin: List[str]
+    filming_location: List[str]
+    production_companies: List[str]
+    budget: str
+    gross_profit: str    
+    reviews: List[ReviewResponse] = []
+
+    @field_serializer('backdrops','posters','gallery')
+    def serialize_bytes(self, file_bytes: List[bytes]):
+        return [base64.b64encode(v) for v in file_bytes]

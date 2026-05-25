@@ -5,6 +5,7 @@ from fastapi import  UploadFile, status
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from pydantic import EmailStr
+from services.func import image_to_bytes
 from models.responseModels import LoginResponse
 from models.models import User, Credential
 from models.requestModels import LoginRequest
@@ -76,8 +77,14 @@ async def login_user(request:LoginRequest):
         
         user = await user_credentials.user.fetch()
 
-        response = LoginResponse(**user.model_dump())
-        return jsonable_encoder(response)
+        if (user.image):
+            user_image = image_to_bytes([user.image],"data/users")[0]
+        else:
+            user_image = None
+
+        response =  LoginResponse(**user.model_dump(exclude={"image"}),image=user_image)
+
+        return response
     except Exception as e:
         logger.error(e)
         raise e

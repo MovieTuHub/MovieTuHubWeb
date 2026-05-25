@@ -10,7 +10,8 @@ from fastapi.responses import JSONResponse
 from pydantic import TypeAdapter
 from models.models import Category, Movie, MovieMainPageCollections, Producer, Actor, MovieCast, StreamingService
 from models.requestModels import MovieCastRequest
-from models.responseModels import MovieResponse
+from models.responseModels import ActorResponse, CreateMovieResponse, MovieCastResponse, MovieResponse
+from services.func import image_to_bytes
 
 from logger import create_logger
 
@@ -57,27 +58,36 @@ async def create_movie_document(backdrops: List[UploadFile],
         poster_files = []
         gallery_files = []
         
-        for file in backdrops:
+        for idx, file in enumerate(backdrops):
             file_data = await file.read()
-            with open(f"data/movies/{slug}/backdrops/{file.filename}","wb") as f:
+            backdrop_name = file.filename.strip().split(".")
+            backdrop_name[0] = f"backdrop_{idx+1}"
+            backdrop_name = ".".join(backdrop_name)
+            with open(f"data/movies/{slug}/backdrops/{backdrop_name}","wb") as f:
                 f.write(file_data)
-            backdrop_files.append(file.filename)
+            backdrop_files.append(backdrop_name)
         
         logger.info("Saved backdrops")
 
-        for file in posters:
+        for idx, file in enumerate(posters):
             file_data = await file.read()
-            with open(f"data/movies/{slug}/posters/{file.filename}","wb") as f:
+            poster_name = file.filename.strip().split(".")
+            poster_name[0] = f"poster_{idx+1}"
+            poster_name = ".".join(poster_name)
+            with open(f"data/movies/{slug}/posters/{poster_name}","wb") as f:
                 f.write(file_data)
-            poster_files.append(file.filename)
+            poster_files.append(poster_name)
         
         logger.info("Saved posters")
 
-        for file in gallery:
+        for idx,file in enumerate(gallery):
             file_data = await file.read()
-            with open(f"data/movies/{slug}/gallery/{file.filename}","wb") as f:
+            gallery_name = file.filename.strip().split(".")
+            gallery_name[0] = f"gallery_{idx+1}"
+            gallery_name = ".".join(gallery_name)
+            with open(f"data/movies/{slug}/gallery/{gallery_name}","wb") as f:
                 f.write(file_data)
-            gallery_files.append(file.filename)
+            gallery_files.append(gallery_name)
         
         logger.info("Saved gallery")
 
@@ -143,7 +153,7 @@ async def create_movie_document(backdrops: List[UploadFile],
 
         logger.info("Movie is saved")
 
-        response = MovieResponse(**movie.model_dump())
+        response = CreateMovieResponse(**movie.model_dump())
 
         return response
     except Exception as e:
@@ -156,11 +166,41 @@ async def get_movies() ->JSONResponse:
     try:
         movies = await Movie.find_all(fetch_links=True).to_list()
 
-        list_type = TypeAdapter(List[MovieResponse])
+        response = []
 
-        response = list_type.validate_python(movies,from_attributes=True)
+        for movie in movies:
+            backdrops = image_to_bytes(movie.backdrops,f"data/movies/{movie.id}/backdrops")
+            posters = image_to_bytes(movie.posters,f"data/movies/{movie.id}/posters")
+            gallery = image_to_bytes(movie.gallery,f"data/movies/{movie.id}/gallery")
+
+            cast_processed = []
+
+            for cast in movie.cast:
+                if (cast.actor.image):
+                    actor_image = image_to_bytes([cast.actor.image],"data/actors")[0]
+                else:
+                    actor_image = None
+                
+                actor_response = ActorResponse(**cast.actor.model_dump(exclude={"image"}),image=actor_image)
+                movie_cast_response = MovieCastResponse(
+                    **cast.model_dump(exclude={"actor"}),
+                    actor=actor_response
+                )
+
+                cast_processed.append(movie_cast_response)
+
+            movie_response = MovieResponse(**movie.model_dump(exclude={"backdrops","posters","gallery","cast"}),
+                                           backdrops=backdrops,
+                                           posters=posters,
+                                           gallery=gallery,
+                                           cast=cast_processed)
+            response.append(movie_response)
+            # cast_processed = []
+
+            # for cast in movie.cast:
+            #     cast_processed.append(image_to_base64([cast.actor.image],"data/actors"))
 
         return response
     except Exception as e:
         logger.error(e)
-        return e
+        raise e

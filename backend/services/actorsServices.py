@@ -3,7 +3,8 @@ from typing import List, Optional
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi import UploadFile, status
-from models.responseModels import ActorResponse
+from services.func import image_to_bytes
+from models.responseModels import ActorResponse, CreateActorResponse
 from models.models import Actor
 from models.requestModels import ActorRequest
 from pydantic import TypeAdapter
@@ -41,7 +42,7 @@ async def create_actor_document(name: str,
 
         logger.info("Actor created!")
 
-        response = ActorResponse(**actor.model_dump())
+        response = CreateActorResponse(**actor.model_dump())
 
         return jsonable_encoder(response)
     except Exception as e:
@@ -51,10 +52,20 @@ async def create_actor_document(name: str,
 async def get_actors()->JSONResponse:
     try:
         actors = await Actor.all().to_list()
-        list_type = TypeAdapter(List[ActorResponse])
+        # list_type = TypeAdapter(List[ActorResponse])
 
-        response = list_type.validate_python(actors,from_attributes=True)
-        return response
+        # response = list_type.validate_python(actors,from_attributes=True)
+        actors_processed = []
+        for actor in actors:
+            if (actor.image):
+                actor_image = image_to_bytes([actor.image],"data/actors")[0]
+            else:
+                actor_image = None
+
+            actor_response = ActorResponse(**actor.model_dump(exclude={"image"}),image=actor_image)
+            actors_processed.append(actor_response)
+
+        return actors_processed
     except Exception as e:
         logger.error(e)
         raise e
