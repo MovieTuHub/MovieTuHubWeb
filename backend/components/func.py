@@ -17,7 +17,8 @@ def create_data_file_structure():
     if ("data" not in os.listdir()):
         os.mkdir("data")
         os.mkdir("data/movies")
-        os.mkdir("data/avatars")
+        os.mkdir("data/actors")
+        os.mkdir("data/users")
         logger.info("Created file system")
     else:
         logger.info("File system already exists")

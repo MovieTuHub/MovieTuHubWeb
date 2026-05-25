@@ -50,7 +50,8 @@ class StreamingServiceEnumRequest(BaseModel):
     service: str 
     link: str
 
-class MovieRequest(BaseModel):
+# ! DEPRECATED !
+class MovieRequest(BaseModel): 
     backdrops: Annotated[List[UploadFile],File()]
     posters: Annotated[List[UploadFile],File()]
     main_page_banner: UploadFile
@@ -77,7 +78,7 @@ class ChangeBookmarkRequest(BaseModel):
     movie: str
     bookmark: bool
 
-
+# ! Deprecated !
 class CreateUserRequest(BaseModel):
     image: Optional[bytes] = None
     email: EmailStr

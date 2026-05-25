@@ -85,7 +85,7 @@ class Movie(Document):
 
 class User(Document):
     username: str
-    image: Optional[bytes] = None
+    image: Optional[str] = None
     bookmarks: List[Link[Movie]] = [] 
 
     class Settings:  

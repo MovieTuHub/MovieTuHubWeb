@@ -31,7 +31,7 @@ class LoginResponse(BaseModel):
 
     id: PydanticObjectId
     username: str
-    image: Optional[bytes] = None
+    image: Optional[str] = None
 
     model_config = {"ser_json_bytes":"base64","from_attributes":True}
 
