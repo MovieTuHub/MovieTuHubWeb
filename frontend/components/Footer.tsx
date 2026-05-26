@@ -5,14 +5,14 @@ import InstagramIcon from './link_icons/InstagramIcon'
 import YouTubeIcon from './link_icons/YouTubeIcon'
 import Link from './buttons/Link'
 
-const Footer = ({ width = "100%", height = 200, className = "" }) => {
+const Footer = ({ width = "100%", height = 200 }) => {
     const gapWidth = Number(width) / 10;
     return (
         <div style={{ width: width, height: height }}
             className={
                 `bg-[#0c1446] bottom-0 text-white
                 shadow-[0px_-5px_5px_2px_#00000040]
-                flex justify-around z-40` + className
+                flex justify-around z-40 select-none`
             }
         >
             <div className="flex flex-col justify-center gap-y-3 z-50">

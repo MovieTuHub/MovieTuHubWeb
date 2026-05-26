@@ -6,13 +6,13 @@ import Image from 'next/image'
 import NextButton from '../buttons/NextButton'
 import CarouselDots from '../buttons/CarouselDots'
 
-interface MovieCarouselProps {
+interface MainPageMovieCarouselProps {
     movieLogos: Array<string>;
     images: Array<string>;
     className?: string;
 }
 
-const MovieCarousel = ({ movieLogos = [], images = [], className }: MovieCarouselProps) => {
+const MainPageMovieCarousel = ({ movieLogos = [], images = [], className }: MainPageMovieCarouselProps) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const currentImage = images[currentSlide];
     const currentLogo = movieLogos[currentSlide];
@@ -32,7 +32,7 @@ const MovieCarousel = ({ movieLogos = [], images = [], className }: MovieCarouse
     return (
         <div className={
             `relative w-full h-125 overflow-hidden
-            flex flex-col justify-between`
+            flex flex-col justify-between select-none`
         }>
             <div className="-z-50 w-full">
                 <Image
@@ -67,4 +67,4 @@ const MovieCarousel = ({ movieLogos = [], images = [], className }: MovieCarouse
     )
 }
 
-export default MovieCarousel
+export default MainPageMovieCarousel

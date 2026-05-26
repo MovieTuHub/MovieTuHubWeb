@@ -5,7 +5,23 @@ import React from 'react'
 import { useState } from 'react'
 import Bookmark from '../buttons/Bookmark'
 
-const MoviePoster = ({ width = 220, height = 330, defaultSrc = "", hoverSrc = "", movieTitle = "", movieSrc = "" }) => {
+interface MoviePosterProps {
+  width?: number;
+  height?: number;
+  defaultSrc: string;
+  hoverSrc: string;
+  movieTitle: string;
+  href: string;
+}
+
+const MoviePoster = ({
+  width = 220,
+  height = 330,
+  defaultSrc,
+  hoverSrc,
+  movieTitle,
+  href
+}: MoviePosterProps) => {
   const bookmarkScale = width / 220;
   const [isHovered, setIsHovered] = useState(false);
 
@@ -14,7 +30,7 @@ const MoviePoster = ({ width = 220, height = 330, defaultSrc = "", hoverSrc = ""
       style={{ width: width }}
       className="shrink-0 object-cover">
       <div className="relative">
-        <a href={movieSrc}
+        <a href={href}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}>
           <Image
@@ -22,7 +38,7 @@ const MoviePoster = ({ width = 220, height = 330, defaultSrc = "", hoverSrc = ""
             width={width}
             height={height}
             src={isHovered ? hoverSrc : defaultSrc}
-            className="aspect-2/3 transition-shadow hover:shadow-[0px_0px_6px_6px_#4a5ac280] duration-300"
+            className="aspect-2/3 transition-shadow hover:shadow-[0px_0px_6px_6px_#4a5ac280] duration-300 select-none"
           />
         </a>
         <div className="absolute right-1 top-1">
@@ -34,7 +50,7 @@ const MoviePoster = ({ width = 220, height = 330, defaultSrc = "", hoverSrc = ""
         </div>
       </div>
       <div className="flex justify-center py-1.25 text-[16px] text-white">
-        <a href={movieSrc} className="cursor-pointer text-center">{movieTitle}</a>
+        <a href={href} className="cursor-pointer text-center">{movieTitle}</a>
       </div>
     </div>
   )
