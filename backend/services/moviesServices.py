@@ -1,6 +1,7 @@
 from datetime import date
 import os
 import json
+import re
 import shutil
 from typing import Annotated, List, Optional
 import ast
@@ -178,12 +179,28 @@ async def get_movies() ->JSONResponse:
     
 async def get_single_movie(slug) -> JSONResponse:
     try:
-        movie = await MovieReviewView.find_one(Movie.id == slug,fetch_links=True)
+        movie = await MovieReviewView.find_one(MovieReviewView.id == slug,fetch_links=True)
 
         if (not movie):
             return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,content={"message":"The movie is not found"})
         
         return await create_movie_response_with_images(movie)
+    except Exception as e:
+        logger.error(e)
+        raise e
+    
+
+async def get_searches(seach_phrase) -> JSONResponse:
+    try:
+        pattern = re.compile(seach_phrase,re.IGNORECASE)
+        movies = await MovieReviewView.find_many(MovieReviewView.name == pattern,fetch_links=True).to_list()
+
+        response = []
+
+        for movie in movies:
+            response.append(await create_movie_response_with_images(movie))
+        
+        return response
     except Exception as e:
         logger.error(e)
         raise e

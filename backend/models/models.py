@@ -4,6 +4,7 @@ from enum import Enum
 from beanie import Link, Document, View
 from typing import List, Optional
 
+
 class StreamingServiceEnum(Enum):
     NETFLIX = "Netflix"
     APPLE_TV = "Apple TV"

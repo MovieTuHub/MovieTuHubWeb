@@ -1,14 +1,26 @@
+import os
 from typing import List
 
 from models.models import Movie, ProducerRoleEnum
-from models.responseModels import ActorResponse, HeroBannerMovieResponse, MainPageMovieResponse, MovieCastResponse, MovieResponse, ReviewResponse, SimpleMovieResponse
+from models.responseModels import ActorResponse, HeroBannerMovieResponse, ImageDataResponse, MainPageMovieResponse, MovieCastResponse, MovieResponse, ReviewResponse, SimpleMovieResponse
+
+mime_types = {
+        '.jpg': 'image/jpeg',
+        '.png': 'image/png',
+        '.webp': 'image/webp'
+        # Add more file extensions and MIME types as needed
+}
 
 
-def image_to_bytes(images:List[str],file_path:str) -> List[bytes]:
+def image_to_bytes(images:List[str],file_path:str) -> List[ImageDataResponse]:
     image_data = []
     for image in images:
+        _,file_extension = os.path.splitext(f"{file_path}/{image}")
         with open(f"{file_path}/{image}","rb") as f:
-            image_data.append(f.read())
+            response = ImageDataResponse(image=f.read(),
+                                         mime=mime_types.get(file_extension.lower(),"*"),
+                                         alt=image)
+            image_data.append(response)
     return image_data
 
 async def create_movie_response_with_images(movie: Movie):
