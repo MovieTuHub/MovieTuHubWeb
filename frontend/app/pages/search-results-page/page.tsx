@@ -4,7 +4,7 @@ import Footer from '@/components/Footer';
 import Delimiter from '@/components/static/Delimiter';
 import React from 'react'
 
-interface Movie {
+interface MovieSearchResult {
     title: string;
     duration: number;
     releaseDate: Date;
@@ -15,11 +15,11 @@ interface Movie {
 }
 
 interface pageProps {
-    searchResults: Array<Movie>;
+    searchResults: Array<MovieSearchResult>;
     searchParams: Promise<{ query?: string }>;
 }
 
-const sampleMovies: Array<Movie> = [
+const sampleMovies: Array<MovieSearchResult> = [
     {
         title: "The Devil Wears Prada 2",
         duration: 119,

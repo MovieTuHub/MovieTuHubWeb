@@ -1,10 +1,18 @@
 import Image from 'next/image'
 import React from 'react'
 
+interface CastBannerProps {
+    width?: number;
+    height?: number;
+    actorPhotoSrc: string;
+    actorName: string;
+    actorRole: string;
+}
+
 const CastBanner = ({
-    width = 250, height = 450, src = "",
-    firstName = "First name", lastName = "Last name", role = "Role"
-}) => {
+    width = 180, height = 400,
+    actorPhotoSrc, actorName, actorRole
+}: CastBannerProps) => {
   return (
     <div
         style={{width: width, height: height}}
@@ -16,16 +24,12 @@ const CastBanner = ({
             alt="Cast banner"
             width={width}
             height={height * 0.7}
-            src={src}
-            className="aspect-50/63"
+            src={actorPhotoSrc}
+            className="aspect-2/3"
         />
-        <div className="bg-[#4a5ac2] flex-1 flex flex-col p-[10]"
-        >
-            <div>
-                <div className="text-white text-[22px] font-semibold">{firstName}</div>
-                <div className="text-white text-[22px] font-semibold">{lastName}</div>
-            </div>
-            <div className="text-white text-[20px] mt-auto">{role}</div>
+        <div className="bg-[#4a5ac2] flex-1 flex flex-col p-[10]">
+            <div className="text-white text-[22px] font-semibold">{actorName}</div>
+            <div className="text-white text-[20px] mt-auto">{actorRole}</div>
         </div>
     </div>
   )

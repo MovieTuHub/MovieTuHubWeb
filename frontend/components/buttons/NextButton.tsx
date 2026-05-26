@@ -11,14 +11,13 @@ interface NextButtonProps {
 const NextButton = ({
   size = 70,
   isFlipped = false,
-  className = "",
   onClick
 }: NextButtonProps) => {
   return (
     <div
       onClick={onClick}
       style={{ width: size, height: size }}
-      className={`bg-[#ffffff33] rounded-full flex justify-center ${className}`}>
+      className="bg-[#ffffff33] rounded-full flex justify-center select-none">
       <FaPlay
         style={{ width: size - 25, height: size - 25 }}
         className={`

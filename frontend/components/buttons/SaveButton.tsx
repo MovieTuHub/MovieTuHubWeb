@@ -9,7 +9,7 @@ const SaveButton = ({width = 50, height = 50}) => {
   return (
     <div style={{width: width, height: height}}
         className="bg-background rounded-[10px] transition-colors
-            hover:bg-[#4a5ac2] duration-200
+            hover:bg-[#4a5ac2] duration-200 shadow-[0px_0px_4px_5px_#4a5ac240]
             flex justify-center">
         <FiBookmark
             style={{width: width - 5, height: height - 5}}

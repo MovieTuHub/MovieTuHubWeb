@@ -1,10 +1,15 @@
 "use client"
 
+import { LargeNumberLike } from 'crypto'
 import React from 'react'
 import { useState } from 'react'
 import { FaStar, FaRegStar } from 'react-icons/fa'
 
-const StarRating = ({ starsLit = 0, size = 30 }) => {
+interface StarRatingProps {
+    starSize: number;
+}
+
+const StarRating = ({ starSize }: StarRatingProps) => {
     const [hoveredStars, setHoveredStars] = useState(0);
     const [selectedStars, setSelectedStars] = useState(0);
 
@@ -25,11 +30,11 @@ const StarRating = ({ starsLit = 0, size = 30 }) => {
                             key={index}
                             onMouseEnter={() => setHoveredStars(starValue)}
                             onClick={() => setSelectedStars(starValue)}
-                            style={{ width: size, height: size }}
+                            style={{ width: starSize, height: starSize }}
                         >
                             <FaStar
-                                size={size}
-                                className={`transition-all duration-150
+                                size={starSize}
+                                className={`cursor-pointer transition-all duration-150
                                 ${isSelected
                                         ? (isHovered ? "text-[#ebb500a0] stroke-white stroke-[30px]" : "text-[#ebb500] storke-0")
                                         : "text-transparent stroke-white stroke-[30px]"

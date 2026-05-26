@@ -35,15 +35,17 @@ const MovieCategory = ({ text, imagesDef, imagesHover, movieTitles }: MovieCateg
                 </div>
                 <div className="flex justify-center gap-x-[8%]">
                     {
-                        imagesDef.map((_, index) => {
-                            return <MoviePoster
-                                key={(startIndex + index) % imagesDef.length}
-                                defaultSrc={imagesDef[(startIndex + index) % imagesDef.length]}
-                                hoverSrc={imagesHover[(startIndex + index) % imagesDef.length]}
-                                movieTitle={movieTitles[(startIndex + index) % imagesDef.length]}
-                                href="/pages/movie-page"
-                            />
-                        })
+                        imagesDef.map((_, index) => (
+                            index < 4
+                                ? <MoviePoster
+                                    key={(startIndex + index) % imagesDef.length}
+                                    defaultSrc={imagesDef[(startIndex + index) % imagesDef.length]}
+                                    hoverSrc={imagesHover[(startIndex + index) % imagesDef.length]}
+                                    movieTitle={movieTitles[(startIndex + index) % imagesDef.length]}
+                                    href="/pages/movie-page"
+                                    />
+                                : ""
+                        ))
                     }
                 </div>
             </div>

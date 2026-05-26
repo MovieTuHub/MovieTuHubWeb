@@ -38,7 +38,7 @@ const MoviePoster = ({
             width={width}
             height={height}
             src={isHovered ? hoverSrc : defaultSrc}
-            className="aspect-2/3 transition-shadow hover:shadow-[0px_0px_6px_6px_#4a5ac280] duration-300"
+            className="aspect-2/3 transition-shadow hover:shadow-[0px_0px_6px_6px_#4a5ac280] duration-300 select-none"
           />
         </a>
         <div className="absolute right-1 top-1">
