@@ -53,7 +53,6 @@ class MovieCast(BaseModel):
 
 # 3. MOVIE DOCUMENT (Placed here so User & Review can reference it)
 class MovieFields(BaseModel):
-    id: str = Field(default=None, alias="_id") 
     backdrops: List[str]
     posters: List[str]
     main_page_banner: str
@@ -77,14 +76,14 @@ class MovieFields(BaseModel):
 
 
 class Movie(Document, MovieFields):
-
+    id: str = Field(default=None, alias="_id") 
     class Settings:
         name = "movies"
 
     @model_validator(mode="after")
     def generate_slug(self) -> "Movie":
         if not self.id:
-            name_slug = self.name.lower().strip().replace(" ", "-")
+            name_slug = self.name.lower().strip().replace(" ", "-").replace(":","").replace(",","")
             year = self.release_date.year
             self.id = f"{name_slug}-{year}"
         return self
@@ -119,6 +118,7 @@ class Review(Document):
 
 class MovieReviewView(View,MovieFields):
     # Add your calculated field to the flattened schema
+    id: str = Field(default=None, alias="_id") 
     average_score: float = 0.0
 
     class Settings:

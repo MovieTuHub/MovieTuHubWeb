@@ -39,7 +39,7 @@ async def create_movie_document(backdrops: List[UploadFile],
     gross_profit: str,
     streaming_service: Optional[str]= None) -> JSONResponse:
     try:
-        slug = "{movie}-{year}".format(movie=name.strip().lower().replace(" ","-"),
+        slug = "{movie}-{year}".format(movie=name.strip().lower().replace(" ","-").replace(":","").replace(",",""),
                                     year = release_date.year)
         
         existing_movie = await Movie.find_one(Movie.id == slug)
