@@ -96,13 +96,16 @@ class HeroBannerMovieResponse(BaseModel):
 class ReviewResponse(BaseModel):
 
     score: int
+    user: str
     username: str
     user_image: Optional[bytes] = None 
     title: str
     review_text: str
     movie: str
 
-    model_config = {"ser_json_bytes":"base64"}
+    @field_serializer("user_image")
+    def serialize_bytes(self, file_bytes: bytes):
+        return base64.b64encode(file_bytes)
 
 
 class CreateMovieResponse(BaseModel):

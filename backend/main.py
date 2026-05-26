@@ -8,6 +8,7 @@ from controllers.authController import auth_router
 from controllers.actorsController import actor_controller
 from controllers.categoriesController import categories_router
 from controllers.movieController import movie_router
+from controllers.reviewsController import reviews_router
 
 from contextlib import asynccontextmanager
 from components.func import init_db, create_data_file_structure
@@ -29,6 +30,7 @@ app.include_router(auth_router)
 app.include_router(actor_controller)
 app.include_router(categories_router)
 app.include_router(movie_router)
+app.include_router(reviews_router)
 
 @app.get("/")
 async def hello():

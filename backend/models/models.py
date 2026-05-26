@@ -73,6 +73,7 @@ class Movie(Document):
     production_companies: List[str]
     budget: str
     gross_profit: str
+    reviews: List[Review] = []
 
     class Settings:
         name = "movies"
@@ -107,7 +108,7 @@ class Review(Document):
     score: int = Field(ge=1, le=5) 
     user: Link[User]
     title: str
-    reviewText: str
+    review_text: str
     movie: Link[Movie]
 
     class Settings: 
