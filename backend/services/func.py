@@ -1,7 +1,7 @@
 from typing import List
 
 from models.models import Movie, ProducerRoleEnum
-from models.responseModels import ActorResponse, HeroBannerMovieResponse, MainPageMovieResponse, MovieCastResponse, MovieResponse, SimpleMovieResponse
+from models.responseModels import ActorResponse, HeroBannerMovieResponse, MainPageMovieResponse, MovieCastResponse, MovieResponse, ReviewResponse, SimpleMovieResponse
 
 
 def image_to_bytes(images:List[str],file_path:str) -> List[bytes]:
@@ -11,7 +11,7 @@ def image_to_bytes(images:List[str],file_path:str) -> List[bytes]:
             image_data.append(f.read())
     return image_data
 
-def create_movie_response_with_images(movie: Movie):
+async def create_movie_response_with_images(movie: Movie):
     backdrops = image_to_bytes(movie.backdrops,f"data/movies/{movie.id}/backdrops")
     posters = image_to_bytes(movie.posters,f"data/movies/{movie.id}/posters")
     gallery = image_to_bytes(movie.gallery,f"data/movies/{movie.id}/gallery")
@@ -31,12 +31,25 @@ def create_movie_response_with_images(movie: Movie):
         )
 
         cast_processed.append(movie_cast_response)
+    
+    reviews_processed =[]
+    for review in movie.reviews:
+        await review.fetch_link("user")
+        user_image = image_to_bytes([review.user.image],"data/users")[0]
+        review_response =  ReviewResponse(**review.model_dump(exclude={"user","movie"}),
+                        user_image=user_image,
+                        username=review.user.username,
+                        user=str(review.user.id),
+                            movie=str(movie.id))
+        
+        reviews_processed.append(review_response)
 
-    movie_response = MovieResponse(**movie.model_dump(exclude={"backdrops","posters","gallery","cast"}),
+    movie_response = MovieResponse(**movie.model_dump(exclude={"backdrops","posters","gallery","cast","reviews"}),
                                     backdrops=backdrops,
                                     posters=posters,
                                     gallery=gallery,
-                                    cast=cast_processed)
+                                    cast=cast_processed,
+                                    reviews=reviews_processed)
     return movie_response
 
 

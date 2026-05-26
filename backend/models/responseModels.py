@@ -58,13 +58,12 @@ class LoginResponse(BaseModel):
 
 class SimpleMovieResponse(BaseModel):
     id: str
-    # rating: float
+    average_score: float = 0.0
     banner: bytes
     name: str
     duration: str
     release_date: date
     director: str
-    # is_bookmaked: bool
 
     @field_serializer('banner')
     def serialize_bytes(self, file_bytes: bytes|None):
@@ -154,6 +153,7 @@ class MovieResponse(BaseModel):
     budget: str
     gross_profit: str    
     reviews: List[ReviewResponse] = []
+    average_score: float = 0.0
 
     @field_serializer('backdrops','posters','gallery')
     def serialize_bytes(self, file_bytes: List[bytes]):
