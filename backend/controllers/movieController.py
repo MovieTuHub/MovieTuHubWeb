@@ -54,9 +54,13 @@ async def create_movie( backdrops: list[UploadFile]=File(...),
 async def get_all_movies():
     return await get_movies()
 
-@movie_router.get(path="/",status_code=status.HTTP_200_OK,response_class=JSONResponse)
+@movie_router.get(path="/single_movie/{slug}",status_code=status.HTTP_200_OK,response_class=JSONResponse)
 async def get_movie(slug):
     return await get_single_movie(slug)
+
+@movie_router.get(path="/search/",status_code=status.HTTP_200_OK,response_class=JSONResponse)
+async def get_searched_movies(search_phrase):
+    return await get_searches(search_phrase)
 
 @movie_router.get(path="/simple_presentation",status_code=status.HTTP_200_OK,response_class=JSONResponse)
 async def get_all_movies_simple():

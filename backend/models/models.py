@@ -1,8 +1,9 @@
 from pydantic import Field, model_validator, BaseModel, EmailStr
 from datetime import date
 from enum import Enum
-from beanie import Link, Document
+from beanie import Link, Document, View
 from typing import List, Optional
+
 
 class StreamingServiceEnum(Enum):
     NETFLIX = "Netflix"
@@ -51,9 +52,7 @@ class MovieCast(BaseModel):
     role: str
 
 # 3. MOVIE DOCUMENT (Placed here so User & Review can reference it)
-
-class Movie(Document):
-    id: str = Field(default=None, alias="_id") 
+class MovieFields(BaseModel):
     backdrops: List[str]
     posters: List[str]
     main_page_banner: str
@@ -73,14 +72,18 @@ class Movie(Document):
     production_companies: List[str]
     budget: str
     gross_profit: str
+    reviews: List[Review] = []
 
+
+class Movie(Document, MovieFields):
+    id: str = Field(default=None, alias="_id") 
     class Settings:
         name = "movies"
 
     @model_validator(mode="after")
     def generate_slug(self) -> "Movie":
         if not self.id:
-            name_slug = self.name.lower().strip().replace(" ", "-")
+            name_slug = self.name.lower().strip().replace(" ", "-").replace(":","").replace(",","")
             year = self.release_date.year
             self.id = f"{name_slug}-{year}"
         return self
@@ -107,10 +110,62 @@ class Review(Document):
     score: int = Field(ge=1, le=5) 
     user: Link[User]
     title: str
-    reviewText: str
+    review_text: str
     movie: Link[Movie]
 
     class Settings: 
         name = "reviews"
 
-MODELS = [Category,Actor,Movie,User,Credential,Review]
+class MovieReviewView(View,MovieFields):
+    # Add your calculated field to the flattened schema
+    id: str = Field(default=None, alias="_id") 
+    average_score: float = 0.0
+
+    class Settings:
+        source = Movie  # Start from the Movie collection to get all movies
+        pipeline = [
+            # 1. Pull independent reviews matching this movie's ID
+            {
+                "$lookup": {
+                    "from": "reviews",
+                    "localField": "_id",
+                    "foreignField": "movie.$id",
+                    "as": "movie_reviews"
+                }
+            },
+            # 2. Flatten the data: Merge all original fields with the new average_score
+            {
+                "$project": {
+                    # This passes through every single field from the Movie document automatically
+                    # without you having to type them out one by one.
+                    "root": "$$ROOT",
+                    
+                    # Calculate the average score
+                    "average_score": { 
+                        "$ifNull": [{"$avg": "$movie_reviews.score"}, 0.0] 
+                    }
+                }
+            },
+            # 3. Replace the root structure so the fields are sitting on the top-level
+            {
+                "$replaceRoot": {
+                    "newRoot": {
+                        "$mergeObjects": ["$root", { "average_score": "$average_score" }]
+                    }
+                }
+            },
+            # 4. Enforce that the _id stays a string if your Movie model uses string IDs/slugs
+            {
+                "$project": {
+                    "_id": { "$toString": "$_id" },
+                    # Pass the rest of the merged document properties through
+                    "backdrops": 1, "posters": 1, "main_page_banner": 1, 
+                    "main_page_collections": 1, "name": 1, "release_date": 1, 
+                    "duration": 1, "categories": 1, "producers": 1, "trailer": 1, 
+                    "overview": 1, "streaming_service": 1, "cast": 1, "gallery": 1, 
+                    "country_origin": 1, "filming_location": 1, "production_companies": 1, 
+                    "budget": 1, "gross_profit": 1, "reviews": 1, "average_score": 1
+                }
+            }
+        ]
+MODELS = [Category,Actor,Movie,User,Credential,Review,MovieReviewView]

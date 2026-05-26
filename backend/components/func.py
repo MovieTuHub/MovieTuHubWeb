@@ -9,7 +9,7 @@ logger = create_logger(__name__)
 async def init_db(db_string: str):
     client = pymongo.AsyncMongoClient(db_string)
 
-    await init_beanie(database=client.db_name, document_models=MODELS)
+    await init_beanie(database=client.db_name, document_models=MODELS,recreate_views=True)
 
     logger.info("Database is set")
 

@@ -5,8 +5,16 @@ from beanie import PydanticObjectId
 from pydantic import BaseModel, ConfigDict, field_serializer
 from models.models import Producer, StreamingService
 
+class ImageDataResponse(BaseModel):
+    image: bytes
+    mime: str
+    alt: str
+
+    @field_serializer('image')
+    def serialize_bytes(self, file_bytes: bytes):
+        return base64.b64encode(file_bytes)
+
 class CreateActorResponse(BaseModel):
-    model_config = {"ser_json_bytes":"base64"}
 
     id: PydanticObjectId
     name: str
@@ -16,13 +24,8 @@ class CreateActorResponse(BaseModel):
 class ActorResponse(BaseModel):
     id: PydanticObjectId
     name: str
-    image: Optional[bytes] = None
+    image: Optional[ImageDataResponse] = None
 
-    @field_serializer('image')
-    def serialize_bytes(self, file_bytes: bytes|None):
-        if (file_bytes is None):
-            return None
-        return base64.b64encode(file_bytes)
 
 class CreateMovieCastResponse(BaseModel): 
 
@@ -47,62 +50,43 @@ class LoginResponse(BaseModel):
 
     id: PydanticObjectId
     username: str
-    image: Optional[bytes] = None
-
-    @field_serializer('image')
-    def serialize_bytes(self, file_bytes: bytes|None):
-        if (file_bytes is None):
-            return None
-        return base64.b64encode(file_bytes)
+    image: Optional[ImageDataResponse] = None
 
 
 class SimpleMovieResponse(BaseModel):
     id: str
-    # rating: float
-    banner: bytes
+    average_score: float = 0.0
+    banner: ImageDataResponse
     name: str
     duration: str
     release_date: date
     director: str
-    # is_bookmaked: bool
-
-    @field_serializer('banner')
-    def serialize_bytes(self, file_bytes: bytes|None):
-        return base64.b64encode(file_bytes)
-
 
 class MainPageMovieResponse(BaseModel):
 
     id: str
-    banners: List[bytes]
+    banners: List[ImageDataResponse]
     name: str
-    # is_bookmaked: bool
 
-    @field_serializer("banners")
-    def serialize_bytes(self, file_bytes: List[bytes]):
-        return [base64.b64encode(v) for v in file_bytes]
     
 class HeroBannerMovieResponse(BaseModel):
 
     id: str
-    banner: bytes
-    backdrop: bytes
+    banner: ImageDataResponse
+    backdrop: ImageDataResponse
 
-    @field_serializer("banner","backdrop")
-    def serialize_bytes(self, file_bytes: bytes):
-        return base64.b64encode(file_bytes)
     
     
 class ReviewResponse(BaseModel):
 
     score: int
+    user: str
     username: str
-    user_image: Optional[bytes] = None 
+    user_image: Optional[ImageDataResponse] = None 
     title: str
     review_text: str
     movie: str
 
-    model_config = {"ser_json_bytes":"base64"}
 
 
 class CreateMovieResponse(BaseModel):
@@ -133,8 +117,8 @@ class MovieResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: str 
-    backdrops: List[bytes]
-    posters: List[bytes]
+    backdrops: List[ImageDataResponse]
+    posters: List[ImageDataResponse]
     name: str
     release_date: date
     duration: str
@@ -144,14 +128,11 @@ class MovieResponse(BaseModel):
     overview: str
     streaming_service: Optional[StreamingService] = None
     cast: List[MovieCastResponse]
-    gallery: List[bytes] = []      
+    gallery: List[ImageDataResponse] = []      
     country_origin: List[str]
     filming_location: List[str]
     production_companies: List[str]
     budget: str
     gross_profit: str    
     reviews: List[ReviewResponse] = []
-
-    @field_serializer('backdrops','posters','gallery')
-    def serialize_bytes(self, file_bytes: List[bytes]):
-        return [base64.b64encode(v) for v in file_bytes]
+    average_score: float = 0.0

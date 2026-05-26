@@ -1,6 +1,7 @@
 from datetime import date
 import os
 import json
+import re
 import shutil
 from typing import Annotated, List, Optional
 import ast
@@ -9,7 +10,7 @@ from beanie.operators import In
 from fastapi import File, Form, UploadFile, status
 from fastapi.responses import JSONResponse
 from pydantic import TypeAdapter
-from models.models import Category, Movie, MovieMainPageCollections, Producer, Actor, MovieCast, StreamingService
+from models.models import Category, Movie, MovieMainPageCollections, MovieReviewView, Producer, Actor, MovieCast, StreamingService
 from models.requestModels import MovieCastRequest
 from models.responseModels import ActorResponse, CreateMovieResponse, MovieCastResponse, MovieResponse
 from services.func import create_hero_banner_movie_response_with_images, create_main_page_movie_response_with_images, create_movie_response_with_images, create_simple_movie_response_with_images
@@ -38,7 +39,7 @@ async def create_movie_document(backdrops: List[UploadFile],
     gross_profit: str,
     streaming_service: Optional[str]= None) -> JSONResponse:
     try:
-        slug = "{movie}-{year}".format(movie=name.strip().lower().replace(" ","-"),
+        slug = "{movie}-{year}".format(movie=name.strip().lower().replace(" ","-").replace(":","").replace(",",""),
                                     year = release_date.year)
         
         existing_movie = await Movie.find_one(Movie.id == slug)
@@ -165,12 +166,11 @@ async def create_movie_document(backdrops: List[UploadFile],
 
 async def get_movies() ->JSONResponse:
     try:
-        movies = await Movie.find_all(fetch_links=True).to_list()
-
+        movies = await MovieReviewView.find_all(fetch_links=True).to_list()
         response = []
 
         for movie in movies:
-            response.append(create_movie_response_with_images(movie))
+            response.append(await create_movie_response_with_images(movie))
 
         return response
     except Exception as e:
@@ -179,19 +179,35 @@ async def get_movies() ->JSONResponse:
     
 async def get_single_movie(slug) -> JSONResponse:
     try:
-        movie = await Movie.find_one(Movie.id == slug,fetch_links=True)
+        movie = await MovieReviewView.find_one(MovieReviewView.id == slug,fetch_links=True)
 
         if (not movie):
             return JSONResponse(status_code=status.HTTP_404_NOT_FOUND,content={"message":"The movie is not found"})
         
-        return create_movie_response_with_images(movie)
+        return await create_movie_response_with_images(movie)
+    except Exception as e:
+        logger.error(e)
+        raise e
+    
+
+async def get_searches(seach_phrase) -> JSONResponse:
+    try:
+        pattern = re.compile(seach_phrase,re.IGNORECASE)
+        movies = await MovieReviewView.find_many(MovieReviewView.name == pattern,fetch_links=True).to_list()
+
+        response = []
+
+        for movie in movies:
+            response.append(await create_movie_response_with_images(movie))
+        
+        return response
     except Exception as e:
         logger.error(e)
         raise e
     
 async def get_movies_simple() ->JSONResponse:
     try:
-        movies = await Movie.find_all(fetch_links=True).to_list()
+        movies = await MovieReviewView.find_all(fetch_links=True).to_list()
 
         response = []
 

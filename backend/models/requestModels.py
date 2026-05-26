@@ -93,7 +93,7 @@ class LoginRequest(BaseModel):
 
 class ReviewRequest(BaseModel):
     score: int = Field(ge=1, le=5) 
-    user: str
+    user: PydanticObjectId
     title: str
     review_text: str
     movie: str
