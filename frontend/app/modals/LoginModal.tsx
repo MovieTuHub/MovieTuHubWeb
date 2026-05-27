@@ -1,7 +1,6 @@
 "use client"
 
 import Button from '@/components/buttons/Button'
-import Link from '@/components/buttons/Link'
 import CheckBox from '@/components/interractibles/CheckBox'
 import CloseButton from '@/components/buttons/CloseButton'
 import React, { useEffect } from 'react'
@@ -9,11 +8,12 @@ import React, { useEffect } from 'react'
 interface LoginModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSwitchForm?: (formType: "signup" | "forgot") => void;
+    onSwitchForm?: (formType: "signup" | "forgot-confirm-email") => void;
+    onClickLogin: () => void;
 }
 
 const LoginModal = ({
-    isOpen, onClose, onSwitchForm
+    isOpen, onClose, onSwitchForm, onClickLogin
 }: LoginModalProps) => {
     useEffect(() => {
         document.body.style.overflow = isOpen ? "hidden" : "";
@@ -23,7 +23,7 @@ const LoginModal = ({
     if (!isOpen) return null;
 
     return (
-        <div className="fixed w-screen h-screen bg-[#000000b3] text-white
+        <div className="fixed inset-0 w-screen h-screen bg-[#000000b3] text-white
             flex justify-center items-center z-100"
             onClick={onClose}
         >
@@ -60,10 +60,16 @@ const LoginModal = ({
                             <CheckBox size={20} />
                             <div className="text-white">Remember me</div>
                         </div>
-                        <Link href="/forms/forgot-password-code-form" text="Forgot password?" fontSize={16} isUnderlined />
+                        <div
+                            onClick={() => onSwitchForm?.("forgot-confirm-email")}
+                            className="text-white underline transition-colors
+                            hover:text-[#4a5ac2] duration-200 cursor-pointer
+                            active:text-[#707594] active:duration-75">
+                            Forgot password?
+                        </div>
                     </div>
-                    <Button text="Login" />
-                    <div onClick={(e) => { e.stopPropagation(); onSwitchForm?.("signup"); }}>
+                    <Button text="Login" onClick={onClickLogin} />
+                    <div onClick={() => onSwitchForm?.("signup")}>
                         <div className="text-[16px] text-center underline cursor-pointer
                             hover:text-[#4a5ac2] active:text-[#707594]">
                             Don't have an account?<br />Sign up

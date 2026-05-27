@@ -2,16 +2,19 @@ import Button from '@/components/buttons/Button'
 import CheckBox from '@/components/interractibles/CheckBox'
 import CloseButton from '@/components/buttons/CloseButton'
 import React, { useEffect } from 'react'
+import { useAuth } from '@/context/AuthContext';
 
 interface SignUpModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSwitchForm?: (formType: "login" | "forgot") => void;
+    onSwitchForm?: (formType: "login") => void;
 }
 
 const page = ({
   isOpen, onClose, onSwitchForm
 }: SignUpModalProps) => {
+  const { login } = useAuth();
+  
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
     return () => { document.body.style.overflow = "" };
@@ -20,7 +23,7 @@ const page = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed w-screen h-screen bg-[#000000b3] text-white
+    <div className="fixed inset-0 w-screen h-screen bg-[#000000b3] text-white
       flex justify-center items-center z-100"
       onClick={onClose}
     >
@@ -70,7 +73,7 @@ const page = ({
           <CheckBox size={20} />
           <div className="text-white">Remember me</div>
         </div>
-        <div onClick={onClose}>
+        <div onClick={() => {login(); onClose();}}>
           <Button text="Sign up" />
         </div>
       </div>

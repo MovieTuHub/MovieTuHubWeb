@@ -1,22 +1,39 @@
 import Button from '@/components/buttons/Button'
 import CloseButton from '@/components/buttons/CloseButton'
-import Link from '@/components/buttons/Link'
-import React from 'react'
+import React, { useEffect } from 'react'
 
-const page = () => {
+interface ForgotPasswordConfirmModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onForward: () => void;
+    onBack: () => void;
+}
+
+const ForgotPasswordConfirmModal = ({
+    isOpen, onClose, onForward, onBack
+}: ForgotPasswordConfirmModalProps) => {
+    useEffect(() => {
+        document.body.style.overflow = isOpen ? "hidden" : "";
+        return () => { document.body.style.overflow = "" };
+    }, [isOpen]);
+
+    if (!isOpen) return null;
+
     return (
-        <div className="
+        <div className="fixed inset-0
             w-screen h-screen bg-[#000000b3] text-white
-            flex justify-center items-center"
+            flex justify-center items-center z-100"
+            onClick={onClose}
         >
             <div style={{ width: 500, height: 550, borderRadius: 30 }}
                 className="bg-background shadow-[0px_0px_20px_10px_#4a5ac240]
                     flex flex-col justify-center items-center gap-y-10"
+                onClick={(e) => e.stopPropagation()}
             >
-                <a href="/forms/login-form"
+                <div onClick={() => onBack()}
                     className="absolute top-41.25 right-133.75">
                     <CloseButton />
-                </a>
+                </div>
                 <div className="text-4xl font-bold">Reset password</div>
                 <div className="flex flex-col gap-y-5">
                     <div className="flex flex-col justify-center items-center gap-y-3">
@@ -40,13 +57,15 @@ const page = () => {
                         />
                     </div>
                 </div>
-                <Link fontSize={16} textIsCentered isUnderlined>
+                <div className="text-white transition-colors cursor-pointer
+                    hover:text-[#4a5ac2] duration-200 text-center underline
+                    active:text-[#707594] active:duration-75">
                     Did not recieve the code?<br />Resend code
-                </Link>
-                <a href="/forms/forgot-password-form"><Button text="Continue" /></a>
+                </div>
+                <Button text="Continue" onClick={() => onForward()} />
             </div>
         </div>
     )
 }
 
-export default page
+export default ForgotPasswordConfirmModal
