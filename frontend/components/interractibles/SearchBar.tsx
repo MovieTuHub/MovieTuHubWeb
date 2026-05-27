@@ -24,10 +24,10 @@ const SearchBar = ({ width = 500, placeholder = "Search" }) => {
                 onKeyDown={handleKeyPress}
                 className={`
                     border border-black rounded-full
-                    flex items-center px-6.25
+                    flex items-center px-4
                     bg-white transition-colors
-                    hover:bg-[#e0e0e0] duration-200
-                    focus:outline-0`
+                    hover:bg-[#d0d0d0] duration-200
+                    focus:bg-white focus:outline-0`
                 }>
             </input>
         </div>

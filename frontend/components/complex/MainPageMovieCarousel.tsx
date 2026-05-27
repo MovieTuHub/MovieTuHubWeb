@@ -8,13 +8,13 @@ import CarouselDots from '../buttons/CarouselDots'
 
 interface MainPageMovieCarouselProps {
     movieLogos: Array<string>;
-    images: Array<string>;
+    backdrops: Array<string>;
     className?: string;
 }
 
-const MainPageMovieCarousel = ({ movieLogos = [], images = [], className }: MainPageMovieCarouselProps) => {
+const MainPageMovieCarousel = ({ movieLogos = [], backdrops = [], className }: MainPageMovieCarouselProps) => {
     const [currentSlide, setCurrentSlide] = useState(0);
-    const currentImage = images[currentSlide];
+    const currentBackdrop = backdrops[currentSlide];
     const currentLogo = movieLogos[currentSlide];
 
     const handleSlideChange = (index: number) => {
@@ -22,11 +22,11 @@ const MainPageMovieCarousel = ({ movieLogos = [], images = [], className }: Main
     }
 
     const handlePrev = () => {
-        setCurrentSlide(() => currentSlide === 0 ? images.length - 1 : currentSlide - 1)
+        setCurrentSlide(() => currentSlide === 0 ? backdrops.length - 1 : currentSlide - 1)
     }
 
     const handleNext = () => {
-        setCurrentSlide(() => currentSlide === images.length - 1 ? 0 : currentSlide + 1)
+        setCurrentSlide(() => currentSlide === backdrops.length - 1 ? 0 : currentSlide + 1)
     }
 
     return (
@@ -44,9 +44,9 @@ const MainPageMovieCarousel = ({ movieLogos = [], images = [], className }: Main
                 />
                 <Image
                     key={currentSlide}
-                    alt="Movie banner carousel"
+                    alt="Movie backdrop"
                     fill
-                    src={currentImage}
+                    src={currentBackdrop}
                     className="object-cover object-top transition-opacity duration-200"
                     priority
                 />
@@ -59,7 +59,7 @@ const MainPageMovieCarousel = ({ movieLogos = [], images = [], className }: Main
                 <CarouselDots
                     dotsSize={20}
                     currentSlide={currentSlide}
-                    totalSlides={images.length}
+                    totalSlides={backdrops.length}
                     onChangeSlide={handleSlideChange}
                 />
             </div>
