@@ -16,14 +16,14 @@ const Footer = ({ width = "100%", height = 200 }) => {
             }
         >
             <div className="flex flex-col justify-center gap-y-3 z-50">
-                <Link href="" text="About Us" />
-                <Link href="" text="Help and Support" />
-                <Link href="" text="Contact Us" />
+                <Link href="/empty-page" text="About Us" />
+                <Link href="/empty-page" text="Help and Support" />
+                <Link href="/empty-page" text="Contact Us" />
             </div>
             <div className="flex flex-col justify-center gap-y-3 z-50">
-                <Link href="" text="FAQ" />
-                <Link href="" text="Terms of Service" />
-                <Link href="" text="Privacy Policy" />
+                <Link href="/faq-page" text="FAQ" />
+                <Link href="/empty-page" text="Terms of Service" />
+                <Link href="/empty-page" text="Privacy Policy" />
             </div>
             <div className="flex flex-col justify-center items-center gap-y-7 z-50">
                 <div className="text-4xl font-semibold">Follow Us</div>
