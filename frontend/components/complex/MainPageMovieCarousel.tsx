@@ -31,24 +31,25 @@ const MainPageMovieCarousel = ({ movieLogos = [], backdrops = [], className }: M
 
     return (
         <div className={
-            `relative w-full h-125 overflow-hidden
+            `relative w-full h-200 overflow-hidden
             flex flex-col justify-between select-none`
         }>
             <div className="-z-50 w-full">
                 <Image
                     alt="Movie logo"
-                    width={300}
-                    height={300}
+                    width={500}
+                    height={500}
                     src={currentLogo}
-                    className="absolute left-48 bottom-16 z-10 max-w-75 max-h-75"
+                    className="absolute left-130 bottom-30 z-10 max-w-75 max-h-75"
+                    unoptimized
                 />
                 <Image
                     key={currentSlide}
                     alt="Movie backdrop"
                     fill
                     src={currentBackdrop}
-                    className="object-cover object-top transition-opacity duration-200"
-                    priority
+                    className="object-cover object-center transition-opacity duration-200"
+                    unoptimized
                 />
             </div>
             <div className="flex justify-center w-screen gap-x-[80%] mt-10">

@@ -1,6 +1,7 @@
+import Footer from "@/components/Footer";
+import NavBar from "@/components/NavBar";
 import type { Metadata } from "next";
 import "./globals.css";
-import NavBar from "@/components/NavBar";
 
 export const metadata: Metadata = {
   title: "MovieTuHub",
@@ -19,6 +20,7 @@ export default function RootLayout({
         <NavBar />
 
         {children}
+        <Footer />
       </body>
     </html>
   );

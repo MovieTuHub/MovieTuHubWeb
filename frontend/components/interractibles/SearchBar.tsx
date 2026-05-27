@@ -7,7 +7,7 @@ const SearchBar = ({ width = 500, placeholder = "Search" }) => {
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter" && searchQuery.trim() != "") {
-            router.push(`/pages/search-results-page?query=${encodeURIComponent(searchQuery.trim())}`);
+            router.push(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
         }
     }
 

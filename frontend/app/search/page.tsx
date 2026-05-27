@@ -1,8 +1,6 @@
 import Button from '@/components/buttons/Button';
-import SearchResult from '@/components/complex/SearchResult'
-import Footer from '@/components/Footer';
+import SearchResult from '@/components/complex/SearchResult';
 import Delimiter from '@/components/static/Delimiter';
-import React from 'react'
 
 interface MovieSearchResult {
     title: string;
@@ -84,8 +82,8 @@ const page = async ({ searchResults = sampleMovies, searchParams }: pageProps) =
                 <div className="text-white flex justify-between px-[15%]">
                     <div className="text-[24px]">Search results for: {currentQuery}</div>
                     <div className="flex gap-x-6 text-[20px]">
-                        <a href="/forms/results-sort-form"><Button text="Sort" height={40}/></a>
-                        <a href="/forms/results-filter-form"><Button text="Filter" height={40}/></a>
+                        <a href="/forms/results-sort-form"><Button text="Sort" height={40} /></a>
+                        <a href="/forms/results-filter-form"><Button text="Filter" height={40} /></a>
                     </div>
                 </div>
                 {
@@ -109,7 +107,6 @@ const page = async ({ searchResults = sampleMovies, searchParams }: pageProps) =
                     )
                 }
             </div>
-            <Footer />
         </div>
     )
 }

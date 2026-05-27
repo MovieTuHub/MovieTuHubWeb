@@ -1,16 +1,13 @@
-import SaveButton from '@/components/buttons/SaveButton'
 import PlayTrailerButton from '@/components/buttons/PlayTrailerButton'
+import SaveButton from '@/components/buttons/SaveButton'
+import StreamButton from '@/components/buttons/StreamButton'
+import ActorsCarousel from '@/components/complex/ActorsCarousel'
+import GalleryCarousel from '@/components/complex/GalleryCarousel'
 import MoviePageBannerCarousel from '@/components/complex/MoviePageBannerCarousel'
+import ReviewsCarousel from '@/components/complex/ReviewsCarousel'
 import StarRating from '@/components/interractibles/StarRating'
 import CategoryBlob from '@/components/static/CategoryBlob'
-import React from 'react'
-import StreamButton from '@/components/buttons/StreamButton'
 import CategoryDelimiter from '@/components/static/CategoryDelimiter'
-import ActorsCarousel from '@/components/complex/ActorsCarousel'
-import ReviewsCarousel from '@/components/complex/ReviewsCarousel'
-import GalleryCarousel from '@/components/complex/GalleryCarousel'
-import Image from 'next/image'
-import Footer from '@/components/Footer'
 
 interface Actor {
     photo: string;
@@ -238,7 +235,6 @@ const page = () => {
                     </div>
                 </div>
             </div>
-            <Footer />
         </div>
     )
 }

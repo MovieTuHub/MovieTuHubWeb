@@ -1,13 +1,12 @@
 "use client"
 
-import { useState, useEffect } from 'react'
 import Image from "next/image"
-import { RxHamburgerMenu } from "react-icons/rx"
+import { useEffect, useState } from 'react'
+import LoginModal from "../app/forms/LoginModal"
+import SignUpModal from "../app/forms/SignUpModal"
 import MenuButton from "./buttons/MenuButton"
 import NavBarButton from "./buttons/NavBarButton"
 import SearchBar from "./interractibles/SearchBar"
-import LoginModal from "../app/forms/LoginModal"
-import SignUpModal from "../app/forms/SignUpModal"
 
 const NavBar = () => {
     const [activeModal, setActiveModal] = useState<null | "login" | "signup" | "forgot">(null);
@@ -15,7 +14,7 @@ const NavBar = () => {
     const [isScrolled, setIsScrolled] = useState(false);
 
     useEffect(() => {
-        const handleScroll = () => setIsScrolled(window.scrollY > 420);
+        const handleScroll = () => setIsScrolled(window.scrollY > 0);
 
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
@@ -32,7 +31,7 @@ const NavBar = () => {
                 <div className="flex flex-row justify-between items-center gap-x-2 max-h-12.5">
                     <div className="flex flex-row gap-x-3 shrink-0">
                         <MenuButton />
-                        <a href="/pages/main-page" className="flex">
+                        <a href="/" className="flex">
                             <Image
                                 src='/MovieTuHub_new.png'
                                 height={50}
@@ -55,14 +54,14 @@ const NavBar = () => {
                         isOpen={isModalOpen}
                         onClose={() => setIsModalOpen(false)}
                         onSwitchForm={(type) => setActiveModal(type as any)}
-                        />
+                    />
                     : <SignUpModal
                         isOpen={isModalOpen}
                         onClose={() => setIsModalOpen(false)}
                         onSwitchForm={() => setActiveModal("login")}
-                        /> 
+                    />
             }
-            
+
         </>
     )
 }
