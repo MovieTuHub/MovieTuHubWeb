@@ -32,7 +32,7 @@ const LoginModal = ({
                     pt-1
                     bg-background
                         justify-left
-                    h-screen w-200"
+                    h-screen w-150"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex flex-row gap-x-3 shrink-0 ">

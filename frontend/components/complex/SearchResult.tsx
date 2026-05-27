@@ -7,8 +7,8 @@ import MoviePosterSearchResult from '../interractibles/MoviePosterNoHoverSrc';
 
 interface SearchResultProps {
     title: string;
-    duration: number;
-    releaseDate: Date;
+    duration: string;
+    releaseDate: string;
     director: string;
     rating: number;
     src: string;
@@ -36,18 +36,18 @@ const SearchResult = ({
                     <div className="flex flex-col justify-center gap-y-16 text-white text-[20px]">
                         <a href={href} className="text-[28px]">{title}</a>
                         <div className="flex flex-col gap-y-3">
-                            <div>Duration: {Math.floor(duration / 60)}hr {duration % 60}min</div>
-                            <div>Release date: {releaseDate.toISOString().split("T")[0]}</div>
+                            <div>Duration: {duration}</div>
+                            <div>Release date: {releaseDate}</div>
                             <div>Director: {director}</div>
                         </div>
                     </div>
                 </div>
                 <div className="flex flex-col items-end gap-y-30">
                     <div className="flex justify-center items-center gap-x-4">
-                        <div className="text-white text-[20px]">{rating}/5</div>
-                        <FaStar size={30} style={{color: "#ebb500"}}/>
+                        <div className="text-white text-[20px]">{rating.toFixed(1)}/5</div>
+                        <FaStar size={30} style={{ color: "#ebb500" }} />
                     </div>
-                    <Link href={href} fontSize={24} text="Reviews"/>
+                    <Link href={href} fontSize={24} text="Reviews" />
                 </div>
             </div>
         </div>

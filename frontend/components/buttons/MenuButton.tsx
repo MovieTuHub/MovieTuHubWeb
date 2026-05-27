@@ -1,4 +1,4 @@
-import Sidebar from '@/app/forms/Sidebar';
+import Sidebar from '@/forms/Sidebar';
 import { useState } from 'react';
 import { RxHamburgerMenu } from "react-icons/rx";
 

@@ -40,7 +40,7 @@ const MainPageMovieCarousel = ({ movieLogos = [], backdrops = [], className }: M
                     width={500}
                     height={500}
                     src={currentLogo}
-                    className="absolute left-130 bottom-30 z-10 max-w-75 max-h-75"
+                    className="absolute left-80 bottom-40 z-10 max-w-75 max-h-75"
                     unoptimized
                 />
                 <Image

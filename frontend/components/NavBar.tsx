@@ -2,8 +2,8 @@
 
 import Image from "next/image"
 import { useEffect, useState } from 'react'
-import LoginModal from "../app/forms/LoginModal"
-import SignUpModal from "../app/forms/SignUpModal"
+import LoginModal from "../forms/LoginModal"
+import SignUpModal from "../forms/SignUpModal"
 import MenuButton from "./buttons/MenuButton"
 import NavBarButton from "./buttons/NavBarButton"
 import SearchBar from "./interractibles/SearchBar"

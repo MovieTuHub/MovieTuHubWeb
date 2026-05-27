@@ -198,7 +198,7 @@ async def get_searches(seach_phrase) -> JSONResponse:
         response = []
 
         for movie in movies:
-            response.append(await create_movie_response_with_images(movie))
+            response.append(create_simple_movie_response_with_images(movie))
         
         return response
     except Exception as e:
