@@ -88,7 +88,7 @@ const reviews: Array<Review> = [
 ]
 
 interface MovieInfo {
-    banners: Array<string>;
+    backdrops: Array<string>;
     posters: Array<string>;
     movieTitle: string;
     rating: number;
@@ -123,7 +123,7 @@ const movieData: MovieInfo = {
     releaseDate: new Date("2014-11-07"),
     categories: ["Adventure", "Drama", "Science fiction"],
     duration: 169,
-    banners: [
+    backdrops: [
         "/movie_page_carousel_test/Interstellar_banner_1.jpg",
         "/movie_page_carousel_test/Interstellar_banner_2.jpg",
         "/movie_page_carousel_test/Interstellar_banner_3.jpg",
@@ -156,7 +156,7 @@ const page = () => {
         <div className="flex flex-col justify-center gap-y-4">
             <MoviePageBannerCarousel
                 movieTitle={movieData.movieTitle}
-                banners={movieData.banners}
+                banners={movieData.backdrops}
                 posters={movieData.posters}
             />
             <div className="absolute w-full h-20 top-105
