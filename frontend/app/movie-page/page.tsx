@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import SaveButton from '@/components/buttons/SaveButton'
 import PlayTrailerButton from '@/components/buttons/PlayTrailerButton'
 import MoviePageBannerCarousel from '@/components/complex/MoviePageBannerCarousel'
@@ -9,8 +12,11 @@ import CategoryDelimiter from '@/components/static/CategoryDelimiter'
 import ActorsCarousel from '@/components/complex/ActorsCarousel'
 import ReviewsCarousel from '@/components/complex/ReviewsCarousel'
 import GalleryCarousel from '@/components/complex/GalleryCarousel'
-import Image from 'next/image'
 import Footer from '@/components/Footer'
+import ReviewButton from '@/components/buttons/ReviewButton'
+import { useAuth } from "@/context/AuthContext"
+import ReviewModal from "../modals/ReviewModal"
+import LoginModal from "../modals/LoginModal"
 
 interface Actor {
     photo: string;
@@ -152,6 +158,10 @@ const movieData: MovieInfo = {
 }
 
 const page = () => {
+    const { isLoggedIn, login } = useAuth();
+    const [activeModal, setActiveModal] = useState<null | "login" | "review">(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     return (
         <div className="flex flex-col justify-center gap-y-4">
             <MoviePageBannerCarousel
@@ -209,8 +219,14 @@ const page = () => {
                 <CategoryDelimiter text="Main cast" isSemibold />
                 <ActorsCarousel actors={movieData.actors} />
             </div>
-            <div className="mt-16 flex flex-col gap-y-5">
+            <div className="relative mt-16 flex flex-col gap-y-9">
                 <CategoryDelimiter text="Reviews" isSemibold />
+                <div className="absolute self-end mt-6 mr-33">
+                    <ReviewButton onClick={() => {
+                        setActiveModal(isLoggedIn ? "review" : "login");
+                        setIsModalOpen(true);
+                    }}/>
+                </div>
                 <ReviewsCarousel reviews={movieData.reviews} />
             </div>
             <div className="mt-16 flex flex-col gap-y-5">
@@ -239,6 +255,34 @@ const page = () => {
                 </div>
             </div>
             <Footer />
+            {
+                isModalOpen && activeModal === "review" && (
+                    <ReviewModal
+                        isOpen={isModalOpen}
+                        onClose={() => {
+                            setActiveModal(null);
+                            setIsModalOpen(false);
+                        }}
+                    />
+                )
+            }
+            {
+                isModalOpen && activeModal === "login" && (
+                    <LoginModal
+                        isOpen={isModalOpen}
+                        onClose={() => {
+                            setActiveModal(null);
+                            setIsModalOpen(false);
+                        }}
+                        onClickLogin={() => {
+                            login()
+                            setActiveModal(null);
+                            setIsModalOpen(false);
+                        }}
+                    />
+                )
+            }
+
         </div>
     )
 }
