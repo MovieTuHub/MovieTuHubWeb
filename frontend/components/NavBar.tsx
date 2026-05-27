@@ -32,7 +32,7 @@ const NavBar = () => {
                 <div className="flex flex-row justify-between items-center gap-x-2 max-h-12.5">
                     <div className="flex flex-row gap-x-3 shrink-0">
                         <MenuButton />
-                        <a href="/pages/main-page" className="flex">
+                        <a href="/main-page" className="flex">
                             <Image
                                 src='/MovieTuHub_new.png'
                                 height={50}
@@ -44,7 +44,8 @@ const NavBar = () => {
                         </a>
                     </div>
                     <div className="justify-self-center"><SearchBar /></div>
-                    <div className="justify-self-end">
+                    <div className="flex justify-self-end gap-x-5">
+                        <a href="/add-movie-page"><NavBarButton text="Add movie" /></a>
                         <NavBarButton text="Login" onClick={() => { setActiveModal("login"); setIsModalOpen(true); }} />
                     </div>
                 </div>
