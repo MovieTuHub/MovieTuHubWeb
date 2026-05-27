@@ -52,6 +52,7 @@ const page = () => {
       <MainPageMovieCarousel
         backdrops={mainPageCaroselData.map(data => `data:${data.backdrop.mime};base64,${data.backdrop.image}`)}
         movieLogos={mainPageCaroselData.map(data => `data:${data.banner.mime};base64,${data.banner.image}`)}
+        movieSlugs={mainPageCaroselData.map(data => data.id)}
       />
       <div className="absolute w-full h-20 top-180
         bg-linear-to-t from-background to-transparent">
@@ -62,18 +63,21 @@ const page = () => {
           imagesDef={onesToWatchMovieData.map(data => `data:${data.banners[0].mime};base64,${data.banners[0].image}`)}
           imagesHover={onesToWatchMovieData.map(data => `data:${data.banners[1].mime};base64,${data.banners[1].image}`)}
           movieTitles={onesToWatchMovieData.map(data => data.name)}
+          movieSlugs={onesToWatchMovieData.map(data => data.id)}
         />
         <MovieCategoryCarousel
           text={"Upcoming"}
           imagesDef={upcomingMovieData.map(data => `data:${data.banners[0].mime};base64,${data.banners[0].image}`)}
           imagesHover={upcomingMovieData.map(data => `data:${data.banners[1].mime};base64,${data.banners[1].image}`)}
           movieTitles={upcomingMovieData.map(data => data.name)}
+          movieSlugs={upcomingMovieData.map(data => data.id)}
         />
         <MovieCategoryCarousel
           text={"All-Timers"}
           imagesDef={allTimersMovieData.map(data => `data:${data.banners[0].mime};base64,${data.banners[0].image}`)}
           imagesHover={allTimersMovieData.map(data => `data:${data.banners[1].mime};base64,${data.banners[1].image}`)}
           movieTitles={allTimersMovieData.map(data => data.name)}
+          movieSlugs={allTimersMovieData.map(data => data.id)}
         />
       </div>
     </div>

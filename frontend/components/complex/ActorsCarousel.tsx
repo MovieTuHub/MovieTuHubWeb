@@ -1,29 +1,22 @@
 "use client"
 
-import React from 'react'
 import { useState } from 'react'
 import NextButton from '../buttons/NextButton'
 import CastBanner from '../static/CastBanner'
 
-interface Actor {
-    photo: string;
-    fullName: string;
-    role: string;
-}
-
 interface ActorsCarouselProps {
-    actors: Array<Actor>;
+    cast: Array<MovieCastResponse>;
 }
 
-const ActorsCarousel = ({ actors = [] }: ActorsCarouselProps) => {
+const ActorsCarousel = ({ cast: cast = [] }: ActorsCarouselProps) => {
     const [startingIndex, setStartingIndex] = useState(0);
 
     const handlePrev = () => {
-        setStartingIndex(() => startingIndex === 0 ? actors.length - 1 : startingIndex - 1)
+        setStartingIndex(() => startingIndex === 0 ? cast.length - 1 : startingIndex - 1)
     }
 
     const handleNext = () => {
-        setStartingIndex(() => startingIndex === actors.length - 1 ? 0 : startingIndex + 1)
+        setStartingIndex(() => startingIndex === cast.length - 1 ? 0 : startingIndex + 1)
     }
 
     return (
@@ -32,14 +25,14 @@ const ActorsCarousel = ({ actors = [] }: ActorsCarouselProps) => {
             <div>
                 <div className="w-full flex justify-center gap-x-14">
                     {
-                        actors.map((_, index) => (
+                        cast.map((castMember, index) => (
                             index < 5
                                 ? <CastBanner
                                     key={index}
-                                    actorPhotoSrc={actors[(startingIndex + index) % actors.length].photo}
-                                    actorName={actors[(startingIndex + index) % actors.length].fullName}
-                                    actorRole={actors[(startingIndex + index) % actors.length].role}
-                                    />
+                                    actorPhotoSrc={`data:${castMember.actor.image.mime};base64,${castMember.actor.image.image}`}
+                                    actorName={castMember.actor.name}
+                                    actorRole={castMember.role}
+                                />
                                 : ""
                         ))
                     }

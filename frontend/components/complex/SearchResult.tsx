@@ -1,9 +1,7 @@
-import React from 'react'
-import Delimiter from '../static/Delimiter';
-import MoviePoster from '../interractibles/MoviePosterNoHoverSrc';
 import { FaStar } from 'react-icons/fa';
 import Link from '../buttons/Link';
 import MoviePosterSearchResult from '../interractibles/MoviePosterNoHoverSrc';
+import Delimiter from '../static/Delimiter';
 
 interface SearchResultProps {
     title: string;
@@ -12,6 +10,7 @@ interface SearchResultProps {
     director: string;
     rating: number;
     src: string;
+    slug: string
 }
 
 const SearchResult = ({
@@ -21,8 +20,9 @@ const SearchResult = ({
     director,
     rating,
     src,
+    slug
 }: SearchResultProps) => {
-    const href = "/movie-page";
+    const href = `/movies/${slug}`;
     return (
         <div className="top-20 w-full flex flex-col justify-center items-center gap-y-5">
             <Delimiter width="70%" />

@@ -5,72 +5,7 @@ import Delimiter from '@/components/static/Delimiter';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-interface MovieSearchResult {
-    title: string;
-    duration: number;
-    releaseDate: Date;
-    director: string;
-    rating: number;
-    defaultSrc: string;
-    //hoverSrc?: string;
-}
-
-interface pageProps {
-    searchResults: Array<MovieSearchResult>;
-}
-
-const sampleMovies: Array<MovieSearchResult> = [
-    {
-        title: "The Devil Wears Prada 2",
-        duration: 119,
-        releaseDate: new Date("2026-05-01"),
-        director: "David Frankel",
-        rating: 3.4,
-        defaultSrc: "/category_test/category1/The_Devil_Wears_Prada_2_banner_default.jpg"
-    },
-    {
-        title: "Lee Cronin's The Mummy",
-        duration: 134,
-        releaseDate: new Date("2026-04-17"),
-        director: "Lee Cronin",
-        rating: 3.2,
-        defaultSrc: "/search_results_test/Lee_Cronins_The_Mummy.jpg"
-    },
-    {
-        title: "The Super Mario Galaxy Movie",
-        duration: 99,
-        releaseDate: new Date("2026-04-01"),
-        director: "Aaron, Horvath, Michael Jelenic, Pierre Leduc",
-        rating: 3.2,
-        defaultSrc: "/search_results_test/The_Super_Mario_Galaxy_Movie.jpg"
-    },
-    {
-        title: "Dhurandhar: The Revenge",
-        duration: 235,
-        releaseDate: new Date("2026-03-19"),
-        director: "Aditya Dhar",
-        rating: 4.3,
-        defaultSrc: "/search_results_test/Dhurandhar_The_Revenge.jpg"
-    },
-    {
-        title: "The Mortuary Assistant Movie",
-        duration: 91,
-        releaseDate: new Date("2026-02-13"),
-        director: "Jeremiah Kipp",
-        rating: 1.9,
-        defaultSrc: "/search_results_test/The_Mortuary_Assistant_Movie.jpg"
-    },
-    {
-        title: "28 Years Later: The Bone Temple",
-        duration: 110,
-        releaseDate: new Date("2026-01-16"),
-        director: "Nia DaCosta",
-        rating: 3.7,
-        defaultSrc: "/search_results_test/28_Years_Later_The_Bone_Temple.jpg"
-    }
-]
-
-const page = ({ searchResults = sampleMovies }: pageProps) => {
+const page = () => {
     const searchParams = useSearchParams()
 
     const search = searchParams.get("query") ?? null;
@@ -109,6 +44,7 @@ const page = ({ searchResults = sampleMovies }: pageProps) => {
                         movieData.map((movie, index) => (
                             <SearchResult
                                 key={index}
+                                slug={movie.id}
                                 title={movie.name}
                                 duration={movie.duration}
                                 releaseDate={movie.release_date}

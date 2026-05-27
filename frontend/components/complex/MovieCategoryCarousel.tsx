@@ -10,9 +10,10 @@ interface MovieCategoryProps {
     imagesDef: Array<string>;
     imagesHover: Array<string>;
     movieTitles: Array<string>
+    movieSlugs: Array<string>
 }
 
-const MovieCategory = ({ text, imagesDef, imagesHover, movieTitles }: MovieCategoryProps) => {
+const MovieCategory = ({ text, imagesDef, imagesHover, movieTitles, movieSlugs }: MovieCategoryProps) => {
     const [startIndex, setStartIndex] = useState(0);
 
     const handlePrev = () => {
@@ -42,8 +43,8 @@ const MovieCategory = ({ text, imagesDef, imagesHover, movieTitles }: MovieCateg
                                     defaultSrc={imagesDef[(startIndex + index) % imagesDef.length]}
                                     hoverSrc={imagesHover[(startIndex + index) % imagesDef.length]}
                                     movieTitle={movieTitles[(startIndex + index) % imagesDef.length]}
-                                    href="/pages/movie-page"
-                                    />
+                                    href={`/movies/${movieSlugs[(startIndex + index) % imagesDef.length]}`}
+                                />
                                 : ""
                         ))
                     }

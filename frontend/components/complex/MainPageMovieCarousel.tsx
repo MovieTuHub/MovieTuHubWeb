@@ -9,13 +9,15 @@ import CarouselDots from '../buttons/CarouselDots'
 interface MainPageMovieCarouselProps {
     movieLogos: Array<string>;
     backdrops: Array<string>;
-    className?: string;
+    movieSlugs: Array<string>;
+
 }
 
-const MainPageMovieCarousel = ({ movieLogos = [], backdrops = [], className }: MainPageMovieCarouselProps) => {
+const MainPageMovieCarousel = ({ movieLogos = [], backdrops = [], movieSlugs = [] }: MainPageMovieCarouselProps) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const currentBackdrop = backdrops[currentSlide];
     const currentLogo = movieLogos[currentSlide];
+    const currentSlug = movieSlugs[currentSlide];
 
     const handleSlideChange = (index: number) => {
         setCurrentSlide(index);
@@ -35,22 +37,24 @@ const MainPageMovieCarousel = ({ movieLogos = [], backdrops = [], className }: M
             flex flex-col justify-between select-none`
         }>
             <div className="-z-50 w-full">
-                <Image
-                    alt="Movie logo"
-                    width={500}
-                    height={500}
-                    src={currentLogo}
-                    className="absolute left-80 bottom-40 z-10 max-w-75 max-h-75"
-                    unoptimized
-                />
-                <Image
-                    key={currentSlide}
-                    alt="Movie backdrop"
-                    fill
-                    src={currentBackdrop}
-                    className="object-cover object-center transition-opacity duration-200"
-                    unoptimized
-                />
+                <a href={`/movies/${currentSlug}`}>
+                    <Image
+                        alt="Movie logo"
+                        width={500}
+                        height={500}
+                        src={currentLogo}
+                        className="absolute left-80 bottom-40 z-10 max-w-75 max-h-75"
+                        unoptimized
+                    />
+                    <Image
+                        key={currentSlide}
+                        alt="Movie backdrop"
+                        fill
+                        src={currentBackdrop}
+                        className="object-cover object-center transition-opacity duration-200"
+                        unoptimized
+                    />
+                </a>
             </div>
             <div className="flex justify-center w-screen gap-x-[80%] mt-10">
                 <NextButton onClick={handlePrev} isFlipped />

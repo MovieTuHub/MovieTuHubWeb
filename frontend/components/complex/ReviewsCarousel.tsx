@@ -1,23 +1,14 @@
 "use client"
 
-import React from 'react'
 import { useState } from 'react'
 import NextButton from '../buttons/NextButton'
 import Review from '../static/Review'
 
-interface Review {
-    profileImgSrc?: string;
-    userName: string;
-    givenRating: number;
-    comment?: string;
-}
-
 interface ReviewsCarouselProps {
-    reviews: Array<Review>;
-    className?: string;
+    reviews: Array<ReviewResponse>;
 }
 
-const ReviewsCarousel = ({ reviews = [], className }: ReviewsCarouselProps) => {
+const ReviewsCarousel = ({ reviews = [] }: ReviewsCarouselProps) => {
     const [startingIndex, setStartingIndex] = useState(0);
 
     const handlePrev = () => {
@@ -34,15 +25,15 @@ const ReviewsCarousel = ({ reviews = [], className }: ReviewsCarouselProps) => {
             <div>
                 <div className="w-full flex justify-center gap-x-6">
                     {
-                        reviews.map((_, index) => (
+                        reviews.map((review, index) => (
                             index < 3
                                 ? <Review
                                     key={index}
-                                    profileImgSrc={reviews[(startingIndex + index) % reviews.length].profileImgSrc}
-                                    userName={reviews[(startingIndex + index) % reviews.length].userName}
-                                    givenRating={reviews[(startingIndex + index) % reviews.length].givenRating}
-                                    comment={reviews[(startingIndex + index) % reviews.length].comment}
-                                    />
+                                    profileImgSrc={review.user_image ? `data:${review.user_image.mime};base64,${review.user_image.image}` : "/DefaultProfileImage.png"}
+                                    userName={review.username}
+                                    givenRating={review.score}
+                                    comment={review.review_text}
+                                />
                                 : ""
                         ))
                     }
