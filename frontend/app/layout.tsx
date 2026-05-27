@@ -2,6 +2,8 @@ import Footer from "@/components/Footer";
 import NavBar from "@/components/NavBar";
 import type { Metadata } from "next";
 import "./globals.css";
+import NavBar from "@/components/NavBar";
+import { AuthProvider } from "@/context/AuthContext"
 
 export const metadata: Metadata = {
   title: "MovieTuHub",
@@ -17,10 +19,10 @@ export default function RootLayout({
     <html
       lang="en">
       <body className="min-h-full flex flex-col">
-        <NavBar />
-
-        {children}
-        <Footer />
+        <AuthProvider>
+          <NavBar />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

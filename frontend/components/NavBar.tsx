@@ -1,5 +1,7 @@
 "use client"
 
+import { useState, useEffect } from 'react'
+import { useAuth } from '@/context/AuthContext'
 import Image from "next/image"
 import { useEffect, useState } from 'react'
 import LoginModal from "../forms/LoginModal"
@@ -7,9 +9,15 @@ import SignUpModal from "../forms/SignUpModal"
 import MenuButton from "./buttons/MenuButton"
 import NavBarButton from "./buttons/NavBarButton"
 import SearchBar from "./interractibles/SearchBar"
+import LoginModal from "../app/modals/LoginModal"
+import SignUpModal from "../app/modals/SignUpModal"
+import ForgotPasswordConfirmModal from '@/app/modals/ForgotPasswordCodeModal'
+import ForgotPasswordChangeModal from '@/app/modals/ForgotPasswordChangeModal'
+
 
 const NavBar = () => {
-    const [activeModal, setActiveModal] = useState<null | "login" | "signup" | "forgot">(null);
+    const { isLoggedIn, login, logout } = useAuth();
+    const [activeModal, setActiveModal] = useState<null | "login" | "signup" | "forgot-confirm-email" | "forgot">(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -19,6 +27,46 @@ const NavBar = () => {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    const renderModal = () => {
+        if (!isModalOpen) return null;
+
+        switch (activeModal) {
+            case "login":
+                return <LoginModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onSwitchForm={(type) => setActiveModal(type as any)}
+                    onClickLogin={() => {
+                        login();
+                        setActiveModal(null);
+                        setIsModalOpen(false);
+                    }}
+                />
+            case "signup":
+                return <SignUpModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onSwitchForm={() => setActiveModal("login")}
+                />
+            case "forgot-confirm-email":
+                return <ForgotPasswordConfirmModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onForward={() => setActiveModal("forgot")}
+                    onBack={() => setActiveModal("login")}
+                />
+            case "forgot":
+                return <ForgotPasswordChangeModal
+                    isOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    onSwitchForm={() => setActiveModal("login")}
+                />
+                break;
+            default:
+                return null;
+        }
+    }
 
     return (
         <>
@@ -43,25 +91,26 @@ const NavBar = () => {
                         </a>
                     </div>
                     <div className="justify-self-center"><SearchBar /></div>
-                    <div className="flex justify-self-end gap-x-5">
-                        <a href="/add-movie-page"><NavBarButton text="Add movie" /></a>
-                        <NavBarButton text="Login" onClick={() => { setActiveModal("login"); setIsModalOpen(true); }} />
-                    </div>
+                    {
+                        isLoggedIn
+                            ? (
+                                <div className="flex justify-self-end gap-x-5">
+                                    <a href="/add-movie-page"><NavBarButton text="Add movie" /></a>
+                                    <NavBarButton text="Log out" onClick={logout} />
+                                    <Image
+                                        alt="Profile image"
+                                        src="/reviews_carousel_test/dj_khaled.png"
+                                        width={35}
+                                        height={35}
+                                        className="rounded-full"
+                                    />
+                                </div>
+                            )
+                            : <NavBarButton text="Login" onClick={() => { setActiveModal("login"); setIsModalOpen(true); }} />
+                    }
                 </div>
             </div>
-            {
-                activeModal == "login"
-                    ? <LoginModal
-                        isOpen={isModalOpen}
-                        onClose={() => setIsModalOpen(false)}
-                        onSwitchForm={(type) => setActiveModal(type as any)}
-                    />
-                    : <SignUpModal
-                        isOpen={isModalOpen}
-                        onClose={() => setIsModalOpen(false)}
-                        onSwitchForm={() => setActiveModal("login")}
-                    />
-            }
+            {renderModal()}
 
         </>
     )

@@ -5,7 +5,7 @@ interface ButtonProps {
   height?: number;
   fontSize?: number;
   text: string;
-  onClick?: (e: any) => void;
+  onClick?: () => void;
 }
 
 const Button = ({
