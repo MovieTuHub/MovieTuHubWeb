@@ -4,7 +4,7 @@ interface NavBarButtonProps {
   width?: number;
   height?: number;
   text: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const NavBarButton = ({

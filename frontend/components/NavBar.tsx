@@ -43,7 +43,8 @@ const NavBar = () => {
                         </a>
                     </div>
                     <div className="justify-self-center"><SearchBar /></div>
-                    <div className="justify-self-end">
+                    <div className="flex justify-self-end gap-x-5">
+                        <a href="/add-movie-page"><NavBarButton text="Add movie" /></a>
                         <NavBarButton text="Login" onClick={() => { setActiveModal("login"); setIsModalOpen(true); }} />
                     </div>
                 </div>
