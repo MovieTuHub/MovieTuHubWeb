@@ -4,7 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from fastapi import UploadFile, status
 from services.func import image_to_bytes
-from models.responseModels import ActorResponse, CreateActorResponse
+from models.responseModels import ActorResponse, CreateActorResponse, SimpleActorResponse
 from models.models import Actor
 from models.requestModels import ActorRequest
 from pydantic import TypeAdapter
@@ -62,7 +62,7 @@ async def get_actors()->JSONResponse:
             else:
                 actor_image = None
 
-            actor_response = ActorResponse(**actor.model_dump(exclude={"image"}),image=actor_image)
+            actor_response = SimpleActorResponse(**actor.model_dump())
             actors_processed.append(actor_response)
 
         return actors_processed

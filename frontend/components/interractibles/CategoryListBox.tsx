@@ -1,9 +1,8 @@
-import React from 'react'
 
 interface ListBoxProps {
     width: number;
     height: number;
-    array: Array<string>
+    array: Array<CategoryResponse>
     textWhenEmpty: string;
     onClick: (i: number) => void;
 }
@@ -32,7 +31,7 @@ const ListBox = ({
                                     className="border border-black rounded-lg px-4 h-10 flex items-center
                                         bg-[#e0e0e0] hover:bg-[#c8c8c8] active:bg-[#a0a0a0]"
                                 >
-                                    <div>{element}</div>
+                                    <div>{element.category}</div>
                                 </li>
                             ))
                         )

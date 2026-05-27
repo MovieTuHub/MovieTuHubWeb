@@ -53,7 +53,7 @@ const LoginModal = ({
                 <div className='flex flex-col gap-y-15 text-5xl pl-2 font-bold'>
                     <a href="/">Home</a>
                     <a href="/search">Search</a>
-                    <a href="/">Create Movie</a>
+                    <a href="/add-movie">Create Movie</a>
                 </div>
             </div>
         </div>

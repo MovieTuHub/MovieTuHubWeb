@@ -27,6 +27,10 @@ class ActorResponse(BaseModel):
     image: Optional[ImageDataResponse] = None
 
 
+class SimpleActorResponse(BaseModel):
+    id: PydanticObjectId
+    name: str
+
 class CreateMovieCastResponse(BaseModel): 
 
     actor: CreateActorResponse

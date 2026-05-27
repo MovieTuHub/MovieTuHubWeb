@@ -40,6 +40,12 @@ interface ReviewResponse {
 
 }
 
+interface SimpleActorResponse {
+
+    name: string
+    id: string
+}
+
 interface ActorResponse {
 
     name: string
@@ -94,3 +100,4 @@ interface MovieResponse {
     budget: string;
     gross_profit: string;
 }
+
