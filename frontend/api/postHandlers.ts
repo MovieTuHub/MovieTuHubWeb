@@ -97,3 +97,22 @@ export async function createMovie(backdrops: Array<File>,
         console.error(e);
     }
 }
+
+
+export async function loignPost(email: string, password: string) {
+    try {
+        const rawData = await fetch("http://localhost:8000/login", { method: "POST", body: JSON.stringify({ email: email, password: password }) })
+
+        const response = await rawData.json()
+
+        if (!rawData.ok) {
+            return { data: response as ErrorResponse, status: rawData.status }
+        }
+        else {
+            return { data: response as LoginResponse, status: rawData.status }
+        }
+    }
+    catch (e) {
+        console.log(e)
+    }
+}

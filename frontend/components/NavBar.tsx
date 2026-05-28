@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+
 import { useAuth } from '@/context/AuthContext'
 import Image from "next/image"
 import { useEffect, useState } from 'react'
@@ -9,8 +9,7 @@ import SignUpModal from "../forms/SignUpModal"
 import MenuButton from "./buttons/MenuButton"
 import NavBarButton from "./buttons/NavBarButton"
 import SearchBar from "./interractibles/SearchBar"
-import LoginModal from "../app/modals/LoginModal"
-import SignUpModal from "../app/modals/SignUpModal"
+
 import ForgotPasswordConfirmModal from '@/app/modals/ForgotPasswordCodeModal'
 import ForgotPasswordChangeModal from '@/app/modals/ForgotPasswordChangeModal'
 

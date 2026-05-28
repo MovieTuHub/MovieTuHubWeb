@@ -1,5 +1,7 @@
 "use client"
+import ReviewModal from '@/app/modals/ReviewModal'
 import PlayTrailerButton from '@/components/buttons/PlayTrailerButton'
+import ReviewButton from '@/components/buttons/ReviewButton'
 import SaveButton from '@/components/buttons/SaveButton'
 import StreamButton from '@/components/buttons/StreamButton'
 import ActorsCarousel from '@/components/complex/ActorsCarousel'
@@ -9,9 +11,15 @@ import ReviewsCarousel from '@/components/complex/ReviewsCarousel'
 import StarRating from '@/components/interractibles/StarRating'
 import CategoryBlob from '@/components/static/CategoryBlob'
 import CategoryDelimiter from '@/components/static/CategoryDelimiter'
+import { useAuth } from '@/context/AuthContext'
+import LoginModal from '@/forms/LoginModal'
 import { use, useEffect, useState } from 'react'
 
 const page = ({ params, }: { params: Promise<{ slug: string }> }) => {
+    const { isLoggedIn, login } = useAuth();
+    const [activeModal, setActiveModal] = useState<null | "login" | "review">(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
 
     const { slug } = use(params)
     const [movieData, setMovieData] = useState<MovieResponse | null>(null)
@@ -87,6 +95,12 @@ const page = ({ params, }: { params: Promise<{ slug: string }> }) => {
             </div>
             <div className="mt-16 flex flex-col gap-y-5">
                 <CategoryDelimiter text="Reviews" isSemibold />
+                <div className="absolute self-end mt-6 mr-33">
+                    <ReviewButton onClick={() => {
+                        setActiveModal(isLoggedIn ? "review" : "login");
+                        setIsModalOpen(true);
+                    }} />
+                </div>
                 <ReviewsCarousel reviews={movieData.reviews} />
             </div>
             <div className="mt-16 flex flex-col gap-y-5">
@@ -114,7 +128,35 @@ const page = ({ params, }: { params: Promise<{ slug: string }> }) => {
                     </div>
                 </div>
             </div>
+            {
+                isModalOpen && activeModal === "review" && (
+                    <ReviewModal
+                        isOpen={isModalOpen}
+                        onClose={() => {
+                            setActiveModal(null);
+                            setIsModalOpen(false);
+                        }}
+                    />
+                )
+            }
+            {
+                isModalOpen && activeModal === "login" && (
+                    <LoginModal
+                        isOpen={isModalOpen}
+                        onClose={() => {
+                            setActiveModal(null);
+                            setIsModalOpen(false);
+                        }}
+                        onClickLogin={() => {
+                            login()
+                            setActiveModal(null);
+                            setIsModalOpen(false);
+                        }}
+                    />
+                )
+            }
         </div>
+
     )
 }
 

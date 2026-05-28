@@ -101,3 +101,14 @@ interface MovieResponse {
     gross_profit: string;
 }
 
+interface LoginResponse {
+
+    id: string
+    username: string
+    image: ImageDataResponse
+}
+
+interface ErrorResponse {
+
+    message: string
+}
